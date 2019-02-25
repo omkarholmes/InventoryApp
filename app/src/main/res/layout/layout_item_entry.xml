@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:padding="1sp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="8">
+
+        <TextView
+            android:textAlignment="center"
+            android:layout_weight="3"
+            android:id="@+id/upcCode"
+            android:hint="@string/upc"
+            android:background="@drawable/border_inventory"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5sp"
+            android:layout_marginStart="5sp"
+            android:padding="5sp"/>
+        <TextView
+            android:textAlignment="center"
+            android:layout_weight="3"
+            android:id="@+id/description"
+            android:hint="@string/description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5sp"
+            android:layout_marginStart="5sp"
+            android:background="@drawable/border_inventory"
+            android:padding="5sp"/>
+        <TextView
+            android:textAlignment="center"
+            android:layout_weight="1"
+            android:id="@+id/quantity"
+            android:hint="@string/quantity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5sp"
+            android:layout_marginStart="5sp"
+            android:background="@drawable/border_inventory"
+            android:padding="5sp"/>
+        <TextView
+            android:textAlignment="center"
+            android:layout_weight="1"
+            android:id="@+id/previousQuantity"
+            android:hint="@string/last_quantity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5sp"
+            android:layout_marginLeft="5sp"
+            android:layout_marginRight="5sp"
+            android:background="@drawable/border_inventory"
+            android:padding="5sp"/>
+
+    </LinearLayout>
+
+</RelativeLayout>

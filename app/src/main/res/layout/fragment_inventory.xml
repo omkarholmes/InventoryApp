@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="center">
+
+    <TextView
+        android:layout_margin="5sp"
+        android:id="@+id/inputText"
+        android:text="Enter the below details to Add an Entry"
+        android:textSize="15sp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <include
+        android:layout_margin="5sp"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_below="@+id/inputText"
+        android:id="@+id/inputRow"
+        layout="@layout/layout_inventory_input_row"/>
+    <LinearLayout
+        android:id="@+id/addBtn"
+        android:gravity="center"
+        android:padding="15sp"
+        android:layout_below="@id/inputRow"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <Button
+            android:id="@+id/addItem"
+            android:text="Add Item"
+            android:textSize="20sp"
+            android:textColor="@color/white"
+            android:background="@color/colorAccent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_below="@id/addBtn"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:text="Inventory List"
+            android:textSize="15sp"
+            android:layout_marginTop="10sp"
+            android:layout_margin="5sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <TextView
+                android:textAlignment="center"
+                android:background="@color/white"
+                android:textColor="@color/colorBlack"
+                android:gravity="center"
+                android:visibility="visible"
+                android:text="Hello"
+                android:textSize="20sp"
+                android:id="@+id/section_label"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+            <android.support.v7.widget.RecyclerView
+                android:background="@color/background"
+                android:id="@+id/recyclerView"
+                android:visibility="gone"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+        </FrameLayout>
+    </LinearLayout>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/fab_margin"
+        android:backgroundTint="@color/newItem"
+        android:src="@drawable/add"/>
+
+</RelativeLayout>
