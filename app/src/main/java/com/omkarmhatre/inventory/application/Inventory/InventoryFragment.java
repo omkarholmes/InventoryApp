@@ -2,6 +2,7 @@ package com.omkarmhatre.inventory.application.Inventory;
 
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -17,6 +18,8 @@ import android.widget.TextView;
 import com.omkarmhatre.inventory.application.PriceBook.PriceBookAdapter;
 import com.omkarmhatre.inventory.application.PriceBook.PriceBookEntry;
 import com.omkarmhatre.inventory.application.R;
+import com.omkarmhatre.inventory.application.Utils.AppService;
+import com.omkarmhatre.inventory.application.Utils.PriceBookService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -107,6 +110,11 @@ public class InventoryFragment extends Fragment implements View.OnClickListener,
                 break;
             }
             case R.id.addItem :{
+                if(upcCode.getText().toString().equals("")&& quantity.getText().toString().equals(""))
+                {
+                    AppService.notifyUser(v,"UPC / Quantity Required ");
+                    break;
+                }
                 welcomeText.setVisibility(View.GONE);
                 recyclerView.setVisibility(View.VISIBLE);
                 InventoryItem item = new InventoryItem(upcCode.getText().toString(),description.getText().toString(),Integer.parseInt(quantity.getText().toString()));
@@ -117,6 +125,8 @@ public class InventoryFragment extends Fragment implements View.OnClickListener,
             }
         }
     }
+
+
 
     private void clearData() {
         upcCode.setText("");
@@ -154,6 +164,31 @@ public class InventoryFragment extends Fragment implements View.OnClickListener,
 
     @Override
     public void onTextChanged(CharSequence s, int start, int before, int count) {
+        boolean found=false;
+        List<PriceBookEntry> list = PriceBookService.getInstance().getPriceBook();
+        if(list.isEmpty())
+        {
+            AppService.notifyUser(this.getView(),"Import Price Book First .");
+            return;
+        }
+        ListIterator<PriceBookEntry> iterator = list.listIterator();
+        while(iterator.hasNext())
+        {
+            PriceBookEntry pb =  iterator.next();
+            if(pb.getUpc().equals(s.toString()))
+            {
+                upcCode.setText(pb.getUpc());
+                description.setText(pb.getDescription());
+                quantity.setFocusable(true);
+                found=true;
+
+            }
+        }
+
+        if(!found)
+        {
+            AppService.notifyUser(this.getView(),"New Item Found !");
+        }
 
     }
 

@@ -17,7 +17,7 @@
             android:layout_weight="3"
             android:id="@+id/upcCode"
             android:hint="@string/upc"
-            android:background="@drawable/border_inventory"
+            android:background="@drawable/border_editable"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="5sp"
@@ -28,11 +28,12 @@
             android:layout_weight="3"
             android:id="@+id/description"
             android:hint="@string/description"
+            android:textSize="18sp"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_marginTop="5sp"
             android:layout_marginStart="5sp"
-            android:background="@drawable/border_inventory"
+            android:background="@drawable/border_not_editable"
             android:padding="5sp"/>
 
         <EditText
@@ -45,7 +46,7 @@
             android:layout_marginTop="5sp"
             android:layout_marginLeft="5sp"
             android:layout_marginRight="5sp"
-            android:background="@drawable/border_inventory"
+            android:background="@drawable/border_editable"
             android:padding="5sp"/>
 
     </LinearLayout>

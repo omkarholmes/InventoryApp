@@ -8,9 +8,14 @@ public class InventoryItem {
     private int lastQuantity;
 
     public InventoryItem(String upc, String description, int quantity) {
-        this.upc = upc;
-        this.description = description;
+        this.upc = upc.equals("") ? "": upc;
+        this.description = description.equals("") ? "": description;
         this.quantity = quantity;
+    }
+
+    private String notifyUser() {
+
+        return "";
     }
 
     public InventoryItem(String upc, String description) {

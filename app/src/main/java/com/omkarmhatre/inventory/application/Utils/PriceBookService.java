@@ -3,13 +3,14 @@ package com.omkarmhatre.inventory.application.Utils;
 import com.omkarmhatre.inventory.application.Inventory.InventoryItem;
 import com.omkarmhatre.inventory.application.PriceBook.PriceBookEntry;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class PriceBookService {
 
     private static PriceBookService instance;
 
-    private List<PriceBookEntry> priceBook;
+    private List<PriceBookEntry> priceBook = new ArrayList<>();
 
     public static PriceBookService getInstance()
     {
@@ -36,5 +37,9 @@ public class PriceBookService {
         }
 
         return inventoryItem;
+    }
+
+    public List<PriceBookEntry> getPriceBook() {
+        return priceBook;
     }
 }

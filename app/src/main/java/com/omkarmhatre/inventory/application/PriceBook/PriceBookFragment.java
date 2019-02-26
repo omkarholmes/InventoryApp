@@ -14,6 +14,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.omkarmhatre.inventory.application.R;
+import com.omkarmhatre.inventory.application.Utils.AppService;
+import com.omkarmhatre.inventory.application.Utils.PriceBookService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +30,7 @@ import butterknife.ButterKnife;
 
      @BindView(R.id.recyclerView)RecyclerView recyclerView;
 
-     List<PriceBookEntry> priceBook = new ArrayList<>();
+     List<PriceBookEntry> priceBook = PriceBookService.getInstance().getPriceBook();
     PriceBookAdapter adapter;
 
     public PriceBookFragment() {
@@ -86,7 +88,7 @@ import butterknife.ButterKnife;
     public void onClick(View v) {
 
         showPriceBook();
-        Snackbar.make(v, "Price Book Imported successfully.", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show();
+        AppService.notifyUser(v,"Price Book Imported successfully.");
+
     }
 }
