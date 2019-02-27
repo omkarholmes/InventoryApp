@@ -5,25 +5,40 @@
     android:layout_height="match_parent"
     android:layout_gravity="center">
 
-    <TextView
-        android:layout_margin="5sp"
-        android:id="@+id/inputText"
-        android:text="Enter the below details to Add an Entry"
-        android:textSize="15sp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-    <include
-        android:layout_margin="5sp"
-        android:layout_height="wrap_content"
-        android:layout_width="match_parent"
-        android:layout_below="@+id/inputText"
-        android:id="@+id/inputRow"
-        layout="@layout/layout_inventory_input_row"/>
     <LinearLayout
+        android:background="@drawable/border_not_editable"
+        android:id="@+id/inputLayout"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="1sp"
+        android:weightSum="2">
+        <TextView
+            android:layout_weight="1"
+            android:textStyle="bold"
+            android:layout_margin="5sp"
+            android:id="@+id/inputText"
+            android:text="Enter the below details "
+            android:textSize="15sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+        <include
+            android:layout_weight="1"
+            android:layout_margin="5sp"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_below="@+id/inputText"
+            android:id="@+id/inputRow"
+            layout="@layout/layout_inventory_input_row"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:visibility="gone"
         android:id="@+id/addBtn"
         android:gravity="center"
-        android:padding="15sp"
-        android:layout_below="@id/inputRow"
+        android:padding="10sp"
+        android:layout_below="@id/inputLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <Button
@@ -35,7 +50,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
     </LinearLayout>
+
     <LinearLayout
+        android:background="@drawable/border_not_editable"
         android:orientation="vertical"
         android:layout_below="@id/addBtn"
         android:layout_width="match_parent"
@@ -44,30 +61,129 @@
         <TextView
             android:text="Inventory List"
             android:textSize="15sp"
+            android:paddingLeft="7sp"
             android:layout_marginTop="10sp"
             android:layout_margin="5sp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
-        <FrameLayout
+        <LinearLayout
+            android:background="@color/background"
+            android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-            <TextView
-                android:textAlignment="center"
-                android:background="@color/white"
-                android:gravity="center"
-                android:visibility="visible"
-                android:text="@string/section_format"
-                android:textSize="20sp"
-                android:id="@+id/section_label"
+            <LinearLayout
+                android:backgroundTint="@color/colorAccent"
+                android:background="@drawable/border_not_editable"
+                android:padding="1sp"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
-            <android.support.v7.widget.RecyclerView
-                android:background="@color/background"
-                android:id="@+id/recyclerView"
-                android:visibility="gone"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="8">
+
+                <TextView
+                    android:textAlignment="center"
+                    android:layout_weight="3"
+                    android:id="@+id/upcCode"
+                    android:text="@string/upc"
+                    android:background="@drawable/border_not_editable"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5sp"
+                    android:layout_marginTop="5sp"
+                    android:layout_marginBottom="5sp"
+                    android:padding="5sp"/>
+                <TextView
+                    android:textAlignment="center"
+                    android:layout_weight="3"
+                    android:id="@+id/description"
+                    android:text="@string/description"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5sp"
+                    android:layout_marginBottom="5sp"
+                    android:layout_marginStart="5sp"
+                    android:background="@drawable/border_not_editable"
+                    android:padding="5sp"/>
+                <TextView
+                    android:textAlignment="center"
+                    android:layout_weight="1"
+                    android:id="@+id/quantity"
+                    android:text="@string/quantity"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5sp"
+                    android:layout_marginBottom="5sp"
+                    android:layout_marginStart="5sp"
+                    android:background="@drawable/border_not_editable"
+                    android:padding="5sp"/>
+                <TextView
+                    android:textAlignment="center"
+                    android:layout_weight="1"
+                    android:id="@+id/previousQuantity"
+                    android:text="@string/last_quantity"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5sp"
+                    android:layout_marginBottom="5sp"
+                    android:layout_marginLeft="5sp"
+                    android:layout_marginRight="5sp"
+                    android:background="@drawable/border_not_editable"
+                    android:padding="5sp"/>
+
+            </LinearLayout>
+            <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
-        </FrameLayout>
+                android:layout_height="match_parent">
+                <LinearLayout
+                    android:background="@color/white"
+                    android:id="@+id/section_label"
+                    android:gravity="center"
+                    android:layout_gravity="center"
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+                    <TextView
+                        android:textStyle="bold"
+                        android:textColor="@color/background"
+                        android:layout_gravity="center"
+                        android:textAlignment="center"
+                        android:background="@color/white"
+                        android:gravity="center"
+                        android:visibility="visible"
+                        android:text="@string/tap"
+                        android:textSize="20sp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                    <android.support.design.widget.FloatingActionButton
+                        android:layout_alignParentBottom="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/fab_margin"
+                        android:backgroundTint="@color/background"
+                        android:src="@drawable/add"/>
+                    <TextView
+                        android:textStyle="bold"
+                        android:textColor="@color/background"
+                        android:layout_gravity="center"
+                        android:textAlignment="center"
+                        android:background="@color/white"
+                        android:gravity="center"
+                        android:visibility="visible"
+                        android:text="@string/to_add_item"
+                        android:textSize="20sp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+                <android.support.v7.widget.RecyclerView
+                    android:background="@color/background"
+                    android:id="@+id/recyclerView"
+                    android:visibility="gone"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"/>
+            </FrameLayout>
+        </LinearLayout>
+
     </LinearLayout>
 
     <android.support.design.widget.FloatingActionButton

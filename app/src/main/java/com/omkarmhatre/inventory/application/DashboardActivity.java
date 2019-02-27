@@ -168,15 +168,10 @@ public class DashboardActivity extends AppCompatActivity {
             {
                 case 0 :
                 {
-                    fragment= FileExplorerFragment.newInstance();
-                    break;
-                }
-                case 1 :
-                {
                     fragment= PriceBookFragment.newInstance();
                     break;
                 }
-                case 2 :
+                case 1 :
                 {
                     fragment= InventoryFragment.newInstance();
                     break;
@@ -190,7 +185,7 @@ public class DashboardActivity extends AppCompatActivity {
         @Override
         public int getCount() {
             // Show 3 total pages.
-            return 3;
+            return 2;
         }
     }
 }

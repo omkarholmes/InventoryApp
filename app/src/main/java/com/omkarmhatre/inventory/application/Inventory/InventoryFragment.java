@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.omkarmhatre.inventory.application.PriceBook.PriceBookAdapter;
@@ -42,7 +43,7 @@ public class InventoryFragment extends Fragment implements View.OnClickListener{
     @BindView(R.id.description)TextView description;
     @BindView(R.id.quantity)EditText quantity;
     @BindView(R.id.addItem)Button addItem;
-    @BindView(R.id.section_label)TextView welcomeText;
+    @BindView(R.id.section_label)LinearLayout introText;
 
 
     List<InventoryItem> inventoryList = new ArrayList<>();
@@ -66,10 +67,7 @@ public class InventoryFragment extends Fragment implements View.OnClickListener{
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_inventory, container, false);
         ButterKnife.bind(this,rootView);
-
-        TextView textView = (TextView) rootView.findViewById(R.id.section_label);
-        textView.setText(getString(R.string.section_format,"Inventory"));
-
+        upcCode.requestFocus();
         setupRecyclerView(new LinearLayoutManager(container.getContext()));
 
         FloatingActionButton fab = (FloatingActionButton) rootView.findViewById(R.id.fab);
@@ -103,6 +101,7 @@ public class InventoryFragment extends Fragment implements View.OnClickListener{
                 }
                 if(PriceBookService.getInstance().getPriceBook().isEmpty())
                 {
+                    clearData();
                     AppService.notifyUser(upcCode,"Import Price Book First .");
                     return;
                 }
@@ -167,7 +166,7 @@ public class InventoryFragment extends Fragment implements View.OnClickListener{
             clearData();
             return;
         }
-        welcomeText.setVisibility(View.GONE);
+        introText.setVisibility(View.GONE);
         recyclerView.setVisibility(View.VISIBLE);
         InventoryItem item = new InventoryItem(upcCode.getText().toString(),description.getText().toString(),Integer.parseInt(quantity.getText().toString()));
         updateInventoryList(item);

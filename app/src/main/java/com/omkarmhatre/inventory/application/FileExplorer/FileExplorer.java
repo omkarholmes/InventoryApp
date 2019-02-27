@@ -133,6 +133,7 @@ public class FileExplorer {
         BufferedReader csvReader = new BufferedReader(new InputStreamReader(stream, Charset.forName("UTF-8")));
         String line="";
         priceBook= PriceBookService.getInstance().getPriceBook();
+        priceBook.clear();
         while ((line=csvReader.readLine()) != null)
         {
             //Spliting the line by ','

@@ -5,7 +5,6 @@ import java.io.FilenameFilter;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.app.Dialog;
@@ -19,18 +18,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.TextView;
 
-import com.omkarmhatre.inventory.application.DashboardActivity;
-import com.omkarmhatre.inventory.application.PriceBook.PriceBookFragment;
 import com.omkarmhatre.inventory.application.R;
-import com.omkarmhatre.inventory.application.Utils.AppService;
 import com.omkarmhatre.inventory.application.Utils.PriceBookService;
 
 import butterknife.ButterKnife;
 
-public class FileExploreFragment extends Fragment implements View.OnClickListener{
+public class FileExplorerFragment extends Fragment implements View.OnClickListener{
 
     // Stores names of traversed directories
     ArrayList<String> str = new ArrayList<String>();
@@ -50,13 +47,12 @@ public class FileExploreFragment extends Fragment implements View.OnClickListene
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_file_explore, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_file_explorer, container, false);
         ButterKnife.bind(this,rootView);
 
-//        FloatingActionButton fab = rootView.findViewById(R.id.fab);
-//        fab.setOnClickListener(this);
+        FloatingActionButton fab = rootView.findViewById(R.id.fab);
+        fab.setOnClickListener(this);
 
-//        showDialog(DIALOG_LOAD_FILE);
         loadFileList();
         showDialog(DIALOG_LOAD_FILE);
         Log.d(TAG, path.getAbsolutePath());
@@ -65,7 +61,7 @@ public class FileExploreFragment extends Fragment implements View.OnClickListene
     }
 
     public static Fragment newInstance() {
-        FileExploreFragment fragment = new FileExploreFragment();
+        FileExplorerFragment fragment = new FileExplorerFragment();
         return fragment;
     }
 
@@ -119,32 +115,21 @@ public class FileExploreFragment extends Fragment implements View.OnClickListene
         }
 
         adapter = new ArrayAdapter<Item>(getContext(),
-                android.R.layout.select_dialog_item, android.R.id.text1,
+                R.layout.layout_directory_item, R.id.dirItemText,
                 fileList) {
             @Override
             public View getView(int position, View convertView, ViewGroup parent) {
                 // creates view
                 View view = super.getView(position, convertView, parent);
-                TextView textView = (TextView) view
-                        .findViewById(android.R.id.text1);
+                TextView textView = (TextView) view.findViewById(R.id.dirItemText);
 
                 // put the image on the text view
-                textView.setCompoundDrawablesWithIntrinsicBounds(
-                        fileList[position].icon, 0, 0, 0);
-
-                // add margin between image and text (support various screen
-                // densities)
-                int dp5 = (int) (5 * getResources().getDisplayMetrics().density + 0.5f);
-                textView.setCompoundDrawablePadding(dp5);
+                ImageView icon = view.findViewById(R.id.dirItemIcon);
+                icon .setImageDrawable(getContext().getDrawable(fileList[position].icon));
 
                 return view;
             }
         };
-
-    }
-
-    @Override
-    public void onClick(View v) {
 
     }
 
@@ -245,6 +230,11 @@ public class FileExploreFragment extends Fragment implements View.OnClickListene
         }
         dialog = builder.show();
         return dialog;
+    }
+
+    @Override
+    public void onClick(View v) {
+        showDialog(DIALOG_LOAD_FILE);
     }
 
 }
