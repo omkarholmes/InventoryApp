@@ -5,27 +5,19 @@
     android:layout_height="match_parent"
     android:layout_gravity="center">
 
-
-    <FrameLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <TextView
-            android:textAlignment="center"
-            android:background="@color/white"
-            android:gravity="center"
-            android:visibility="visible"
-            android:text="@string/price_book"
-            android:textSize="20sp"
-            android:id="@+id/section_label"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center">
         <android.support.v7.widget.RecyclerView
             android:background="@color/background"
             android:id="@+id/recyclerView"
-            android:visibility="gone"
+            android:visibility="visible"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
-    </FrameLayout>
+    </LinearLayout>
+
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"

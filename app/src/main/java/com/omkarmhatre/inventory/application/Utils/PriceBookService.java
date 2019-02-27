@@ -10,7 +10,7 @@ public class PriceBookService {
 
     private static PriceBookService instance;
 
-    private List<PriceBookEntry> priceBook = new ArrayList<>();
+    private List<PriceBookEntry> priceBook = new ArrayList<>() ;
 
     public static PriceBookService getInstance()
     {
@@ -37,6 +37,10 @@ public class PriceBookService {
         }
 
         return inventoryItem;
+    }
+
+    public void setPriceBook(List<PriceBookEntry> priceBook) {
+        this.priceBook = priceBook;
     }
 
     public List<PriceBookEntry> getPriceBook() {

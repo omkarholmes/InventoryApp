@@ -1,6 +1,9 @@
 <resources>
     <string name="app_name">Inventory App</string>
+    <string name="tab_text_0">File Explorer</string>
+    <string name="explore_file">Explore Files Here …</string>
     <string name="tab_text_1">Price Book</string>
+    <string name="price_book">No Price Book Imported Yet ..</string>
     <string name="tab_text_2">Inventory</string>
     <string name="action_settings">Settings</string>
     <string name="section_format">Welcome to %1$s section.</string>

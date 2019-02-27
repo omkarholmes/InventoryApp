@@ -54,10 +54,9 @@
             <TextView
                 android:textAlignment="center"
                 android:background="@color/white"
-                android:textColor="@color/colorBlack"
                 android:gravity="center"
                 android:visibility="visible"
-                android:text="Hello"
+                android:text="@string/section_format"
                 android:textSize="20sp"
                 android:id="@+id/section_label"
                 android:layout_width="match_parent"

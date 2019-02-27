@@ -22,6 +22,7 @@ import com.omkarmhatre.inventory.application.Utils.AppService;
 import com.omkarmhatre.inventory.application.Utils.PriceBookService;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.ListIterator;
 
@@ -31,7 +32,7 @@ import butterknife.ButterKnife;
 /**
  * A placeholder fragment containing a simple view.
  */
-public class InventoryFragment extends Fragment implements View.OnClickListener, TextWatcher{
+public class InventoryFragment extends Fragment implements View.OnClickListener{
     /**
      * The fragment argument representing the section number for this
      * fragment.
@@ -46,6 +47,7 @@ public class InventoryFragment extends Fragment implements View.OnClickListener,
 
     List<InventoryItem> inventoryList = new ArrayList<>();
     InventoryItemAdapter adapter;
+
 
     public InventoryFragment() {
     }
@@ -72,26 +74,65 @@ public class InventoryFragment extends Fragment implements View.OnClickListener,
 
         FloatingActionButton fab = (FloatingActionButton) rootView.findViewById(R.id.fab);
         fab.setOnClickListener(this);
+
         addItem.setOnClickListener(this);
 
-        upcCode.addTextChangedListener(this);
+        setupTextwatcher();
 
         return rootView;
     }
 
-    public void showPriceBook() {
-        importPriceBook();
-        adapter.notifyDataSetChanged();
+    private void setupTextwatcher() {
+
+        upcCode.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if(s.toString().equals(""))
+                {
+                    return;
+                }
+                if(PriceBookService.getInstance().getPriceBook().isEmpty())
+                {
+                    AppService.notifyUser(upcCode,"Import Price Book First .");
+                    return;
+                }
+                checkUpcInPriceBook(s.toString());
+            }
+        });
+
+
+        quantity.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if(s.toString().equals(""))
+                {
+                    return;
+                }
+                addItemInInventoryList(quantity);
+            }
+        });
     }
 
-    public void importPriceBook() {
-
-        InventoryItem pb = new InventoryItem("20","Omkar",10);
-        inventoryList.add(pb);
-        inventoryList.add(pb);
-        inventoryList.add(pb);
-
-    }
 
 
     private void setupRecyclerView(LinearLayoutManager linearLayoutManager) {
@@ -107,23 +148,31 @@ public class InventoryFragment extends Fragment implements View.OnClickListener,
         switch(v.getId())
         {
             case R.id.fab :{
+                //Todo : remove below code and change to add into price book
+                quantity.setText("10");
                 break;
             }
             case R.id.addItem :{
-                if(upcCode.getText().toString().equals("")&& quantity.getText().toString().equals(""))
-                {
-                    AppService.notifyUser(v,"UPC / Quantity Required ");
-                    break;
-                }
-                welcomeText.setVisibility(View.GONE);
-                recyclerView.setVisibility(View.VISIBLE);
-                InventoryItem item = new InventoryItem(upcCode.getText().toString(),description.getText().toString(),Integer.parseInt(quantity.getText().toString()));
-                updateInventoryList(item);
-                adapter.notifyDataSetChanged();
-                clearData();
+                addItemInInventoryList(v);
                 break;
             }
         }
+    }
+
+    private void addItemInInventoryList(View view)
+    {
+        if(upcCode.getText().toString().equals("") || quantity.getText().toString().equals(""))
+        {
+            AppService.notifyUser(view,"UPC / Quantity Required ");
+            clearData();
+            return;
+        }
+        welcomeText.setVisibility(View.GONE);
+        recyclerView.setVisibility(View.VISIBLE);
+        InventoryItem item = new InventoryItem(upcCode.getText().toString(),description.getText().toString(),Integer.parseInt(quantity.getText().toString()));
+        updateInventoryList(item);
+        adapter.notifyDataSetChanged();
+        clearData();
     }
 
 
@@ -132,6 +181,7 @@ public class InventoryFragment extends Fragment implements View.OnClickListener,
         upcCode.setText("");
         description.setText("");
         quantity.setText("");
+        upcCode.requestFocus();
     }
 
     private void updateInventoryList(InventoryItem newItem) {
@@ -151,49 +201,33 @@ public class InventoryFragment extends Fragment implements View.OnClickListener,
                 newItem.setLastQuantity(0);
             }
         }
-
+        Collections.reverse(inventoryList);
         inventoryList.add(newItem);
+        Collections.reverse(inventoryList);
 
     }
 
 
-    @Override
-    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-    }
-
-    @Override
-    public void onTextChanged(CharSequence s, int start, int before, int count) {
+    private void checkUpcInPriceBook(String s) {
         boolean found=false;
-        List<PriceBookEntry> list = PriceBookService.getInstance().getPriceBook();
-        if(list.isEmpty())
-        {
-            AppService.notifyUser(this.getView(),"Import Price Book First .");
-            return;
-        }
-        ListIterator<PriceBookEntry> iterator = list.listIterator();
+        ListIterator<PriceBookEntry> iterator = PriceBookService.getInstance().getPriceBook().listIterator();
         while(iterator.hasNext())
         {
             PriceBookEntry pb =  iterator.next();
             if(pb.getUpc().equals(s.toString()))
             {
-                upcCode.setText(pb.getUpc());
                 description.setText(pb.getDescription());
-                quantity.setFocusable(true);
+                quantity.requestFocus();
                 found=true;
-
+                break;
             }
+            description.setText("");
         }
-
         if(!found)
         {
             AppService.notifyUser(this.getView(),"New Item Found !");
         }
-
     }
 
-    @Override
-    public void afterTextChanged(Editable s) {
 
-    }
 }

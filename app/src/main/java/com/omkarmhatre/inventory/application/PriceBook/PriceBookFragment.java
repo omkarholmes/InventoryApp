@@ -29,8 +29,9 @@ import butterknife.ButterKnife;
  public class PriceBookFragment extends Fragment implements View.OnClickListener {
 
      @BindView(R.id.recyclerView)RecyclerView recyclerView;
+     @BindView(R.id.section_label)TextView textView ;
 
-     List<PriceBookEntry> priceBook = PriceBookService.getInstance().getPriceBook();
+     List<PriceBookEntry> priceBook =PriceBookService.getInstance().getPriceBook();
     PriceBookAdapter adapter;
 
     public PriceBookFragment() {
@@ -50,12 +51,11 @@ import butterknife.ButterKnife;
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_price_book, container, false);
         ButterKnife.bind(this,rootView);
-        TextView textView = (TextView) rootView.findViewById(R.id.section_label);
-        textView.setText(getString(R.string.section_format, "Price Book"));
+        textView.setText(getString(R.string.price_book));
 
         setupRecyclerView(new LinearLayoutManager(container.getContext()));
 
-        FloatingActionButton fab = (FloatingActionButton) rootView.findViewById(R.id.fab);
+        FloatingActionButton fab = rootView.findViewById(R.id.fab);
         fab.setOnClickListener(this);
 
         return rootView;
@@ -64,16 +64,19 @@ import butterknife.ButterKnife;
     public void showPriceBook() {
         importPriceBook();
         adapter.notifyDataSetChanged();
+        textView.setVisibility(View.GONE);
+        recyclerView.setVisibility(View.VISIBLE);
     }
 
+    //Code to import PriceBook File
     public void importPriceBook() {
-
-
-        PriceBookEntry pb = new PriceBookEntry("20","Omkar");
-        priceBook.add(pb);
-        priceBook.add(pb);
-        priceBook.add(pb);
-
+        priceBook = PriceBookService.getInstance().getPriceBook();
+        //priceBook.addAll(PriceBookService.getInstance().getPriceBook());
+        if(priceBook.isEmpty())
+        {
+            //notify user to add items in price book
+            return;
+        }
     }
 
     private void setupRecyclerView(LinearLayoutManager linearLayoutManager) {
