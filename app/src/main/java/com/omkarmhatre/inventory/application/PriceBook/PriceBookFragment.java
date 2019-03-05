@@ -4,6 +4,7 @@ package com.omkarmhatre.inventory.application.PriceBook;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Environment;
@@ -22,6 +23,7 @@ import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.TextView;
 
+import com.omkarmhatre.inventory.application.BluetoothConnector.BluetoothConnector;
 import com.omkarmhatre.inventory.application.FileExplorer.FileExplorer;
 import com.omkarmhatre.inventory.application.FileExplorer.FileExplorerFragment;
 import com.omkarmhatre.inventory.application.R;
@@ -291,6 +293,9 @@ import butterknife.ButterKnife;
 
     @Override
     public void onClick(View v) {
-        showDialog(DIALOG_LOAD_FILE);
+
+        //showDialog(DIALOG_LOAD_FILE);
+
+        startActivity(new Intent(getContext(),BluetoothConnector.class));
     }
 }

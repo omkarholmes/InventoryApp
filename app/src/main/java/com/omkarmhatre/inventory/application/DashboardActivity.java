@@ -69,6 +69,7 @@ public class DashboardActivity extends AppCompatActivity {
         //Permissions
 
         askForPermission(Manifest.permission.READ_EXTERNAL_STORAGE,100);
+        askForPermission(Manifest.permission.BLUETOOTH,120);
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
@@ -98,11 +99,7 @@ public class DashboardActivity extends AppCompatActivity {
 
                 ActivityCompat.requestPermissions(DashboardActivity.this, new String[]{permission}, requestCode);
             }
-        } else {
-            Toast.makeText(this, "" + permission + " is already granted.", Toast.LENGTH_SHORT).show();
         }
-
-
     }
 
     @Override

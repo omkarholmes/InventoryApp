@@ -10,15 +10,17 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:weightSum="8">
+        android:weightSum="10">
 
         <TextView
             android:textAlignment="center"
             android:layout_weight="3"
             android:id="@+id/upcCode"
             android:hint="@string/upc"
+            android:ellipsize="end"
+            android:lines="1"
             android:background="@drawable/border_editable"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="5sp"
             android:layout_marginStart="5sp"
@@ -28,7 +30,9 @@
             android:layout_weight="3"
             android:id="@+id/description"
             android:hint="@string/description"
-            android:layout_width="wrap_content"
+            android:ellipsize="end"
+            android:lines="1"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="5sp"
             android:layout_marginStart="5sp"
@@ -36,10 +40,12 @@
             android:padding="5sp"/>
         <TextView
             android:textAlignment="center"
-            android:layout_weight="1"
+            android:layout_weight="2"
             android:id="@+id/quantity"
             android:hint="@string/quantity"
-            android:layout_width="wrap_content"
+            android:ellipsize="end"
+            android:lines="1"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="5sp"
             android:layout_marginStart="5sp"
@@ -47,10 +53,12 @@
             android:padding="5sp"/>
         <TextView
             android:textAlignment="center"
-            android:layout_weight="1"
+            android:layout_weight="2"
             android:id="@+id/previousQuantity"
             android:hint="@string/last_quantity"
-            android:layout_width="wrap_content"
+            android:ellipsize="end"
+            android:lines="1"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="5sp"
             android:layout_marginLeft="5sp"

@@ -24,8 +24,8 @@ public class PriceBookEntryViewHolder extends RecyclerView.ViewHolder {
        TextView upc = view.findViewById(R.id.upcCode);
        TextView description = view.findViewById(R.id.description);
 
-       upc.setText(priceBookEntry.getUpc());
-       description.setText(priceBookEntry.getDescription());
+       upc.setText(priceBookEntry.getUpc().replaceAll("\\s",""));
+       description.setText(priceBookEntry.getDescription().trim());
 
     }
 }

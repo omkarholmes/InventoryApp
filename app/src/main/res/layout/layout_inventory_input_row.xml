@@ -14,22 +14,28 @@
 
         <EditText
             android:textAlignment="center"
-            android:layout_weight="3"
+            android:layout_weight="2"
             android:id="@+id/upcCode"
+            android:lines="1"
+            android:ellipsize="end"
             android:hint="@string/upc"
+            android:inputType="number"
+            android:maxLength="13"
             android:background="@drawable/border_editable"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="5sp"
             android:layout_marginStart="5sp"
             android:padding="5sp"/>
         <TextView
             android:textAlignment="center"
-            android:layout_weight="3"
+            android:layout_weight="4"
+            android:lines="1"
+            android:ellipsize="end"
             android:id="@+id/description"
             android:hint="@string/description"
             android:textSize="18sp"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_marginTop="5sp"
             android:layout_marginStart="5sp"
@@ -37,11 +43,14 @@
             android:padding="5sp"/>
 
         <EditText
+            android:ellipsize="end"
             android:textAlignment="center"
             android:layout_weight="2"
             android:id="@+id/quantity"
+            android:lines="1"
             android:hint="@string/quantity"
-            android:layout_width="wrap_content"
+            android:inputType="number"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="5sp"
             android:layout_marginLeft="5sp"

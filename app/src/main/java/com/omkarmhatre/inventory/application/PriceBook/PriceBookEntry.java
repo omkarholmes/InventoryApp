@@ -6,8 +6,8 @@ public class PriceBookEntry {
     public String description;
 
     public PriceBookEntry(String upc, String description) {
-        this.upc = upc;
-        this.description = description;
+        this.upc = upc.trim();
+        this.description = description.trim();
     }
 
     public String getUpc() {
