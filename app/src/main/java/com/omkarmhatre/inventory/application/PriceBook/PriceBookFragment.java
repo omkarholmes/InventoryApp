@@ -23,7 +23,6 @@ import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.TextView;
 
-import com.omkarmhatre.inventory.application.BluetoothConnector.BluetoothConnector;
 import com.omkarmhatre.inventory.application.FileExplorer.FileExplorer;
 import com.omkarmhatre.inventory.application.FileExplorer.FileExplorerFragment;
 import com.omkarmhatre.inventory.application.R;
@@ -273,7 +272,6 @@ import butterknife.ButterKnife;
                                     AppService.notifyUser(getView(),"Please fill in some data in file");
                                     return;
                                 }
-                                priceBook.remove(0);
                                 showPriceBook();
                                 AppService.notifyUser(getView(),"Price Book Imported successfully.");
                             } catch (IOException e) {
@@ -294,8 +292,8 @@ import butterknife.ButterKnife;
     @Override
     public void onClick(View v) {
 
-        //showDialog(DIALOG_LOAD_FILE);
+        showDialog(DIALOG_LOAD_FILE);
 
-        startActivity(new Intent(getContext(),BluetoothConnector.class));
+        //startActivity(new Intent(getContext(),BluetoothConnector.class));
     }
 }

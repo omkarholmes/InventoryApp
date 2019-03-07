@@ -1,5 +1,7 @@
 package com.omkarmhatre.inventory.application.Inventory;
 
+import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -16,11 +18,14 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.omkarmhatre.inventory.application.DashboardActivity;
 import com.omkarmhatre.inventory.application.PriceBook.PriceBookAdapter;
 import com.omkarmhatre.inventory.application.PriceBook.PriceBookEntry;
 import com.omkarmhatre.inventory.application.R;
 import com.omkarmhatre.inventory.application.Utils.AppService;
 import com.omkarmhatre.inventory.application.Utils.PriceBookService;
+import com.omkarmhatre.inventory.application.VoiceListener.SpeechListenerService;
+import com.omkarmhatre.inventory.application.VoiceListener.VoiceListener;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -33,6 +38,7 @@ import butterknife.ButterKnife;
 /**
  * A placeholder fragment containing a simple view.
  */
+@SuppressLint("ValidFragment")
 public class InventoryFragment extends Fragment implements View.OnClickListener{
     /**
      * The fragment argument representing the section number for this
@@ -44,21 +50,24 @@ public class InventoryFragment extends Fragment implements View.OnClickListener{
     @BindView(R.id.quantity)EditText quantity;
     @BindView(R.id.addItem)Button addItem;
     @BindView(R.id.section_label)LinearLayout introText;
+    @BindView(R.id.fab)FloatingActionButton fab;
 
 
     List<InventoryItem> inventoryList = new ArrayList<>();
     InventoryItemAdapter adapter;
+    DashboardActivity activity;
 
 
-    public InventoryFragment() {
+    public InventoryFragment(DashboardActivity activity) {
+        this.activity=activity;
     }
 
     /**
      * Returns a new instance of this fragment for the given section
      * number.
      */
-    public static Fragment newInstance() {
-        InventoryFragment fragment = new InventoryFragment();
+    public static Fragment newInstance(DashboardActivity activity) {
+        InventoryFragment fragment = new InventoryFragment(activity);
         return fragment;
     }
 
@@ -70,17 +79,19 @@ public class InventoryFragment extends Fragment implements View.OnClickListener{
         upcCode.requestFocus();
         setupRecyclerView(new LinearLayoutManager(container.getContext()));
 
-        FloatingActionButton fab = (FloatingActionButton) rootView.findViewById(R.id.fab);
-        fab.setOnClickListener(this);
-
-        addItem.setOnClickListener(this);
-
-        setupTextwatcher();
+        setOnClickListeners();
+        setupTextWatcher();
 
         return rootView;
     }
 
-    private void setupTextwatcher() {
+    private void setOnClickListeners() {
+        fab.setOnClickListener(this);
+        addItem.setOnClickListener(this);
+        quantity.setOnClickListener(this);
+    }
+
+    private void setupTextWatcher() {
 
         upcCode.addTextChangedListener(new TextWatcher() {
             @Override
@@ -99,13 +110,12 @@ public class InventoryFragment extends Fragment implements View.OnClickListener{
                 {
                     return;
                 }
-                if(PriceBookService.getInstance().getPriceBook().isEmpty())
-                {
-                    clearData();
-                    AppService.notifyUser(upcCode,"Import Price Book First .");
-                    return;
-                }
                 checkUpcInPriceBook(s.toString());
+                /*if(!PriceBookService.getInstance().getPriceBook().isEmpty())
+                {
+                    checkUpcInPriceBook(s.toString());
+                }*/
+
             }
         });
 
@@ -148,7 +158,9 @@ public class InventoryFragment extends Fragment implements View.OnClickListener{
         {
             case R.id.fab :{
                 //Todo : remove below code and change to add into price book
-                quantity.setText("10");
+                //SpeechListenerService.start(this,getContext());
+                //startActivity(new Intent(getContext(),VoiceListener.class));
+                activity.startListening();
                 break;
             }
             case R.id.addItem :{
@@ -217,6 +229,8 @@ public class InventoryFragment extends Fragment implements View.OnClickListener{
             {
                 description.setText(pb.getDescription());
                 quantity.requestFocus();
+                //activity.startListening();
+                //SpeechListenerService.start(this,getContext());
                 found=true;
                 break;
             }
@@ -226,6 +240,11 @@ public class InventoryFragment extends Fragment implements View.OnClickListener{
         {
             AppService.notifyUser(this.getView(),"New Item Found !");
         }
+    }
+
+    public void setQuantity(String quantityValue)
+    {
+        quantity.setText(quantityValue);
     }
 
 

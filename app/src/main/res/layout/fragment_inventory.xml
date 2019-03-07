@@ -74,11 +74,11 @@
             <LinearLayout
                 android:backgroundTint="@color/colorAccent"
                 android:background="@drawable/border_not_editable"
-                android:padding="5sp"
+                android:paddingBottom="5sp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:weightSum="9">
+                android:weightSum="10">
 
                 <TextView
                     android:textAlignment="center"
@@ -86,43 +86,53 @@
                     android:id="@+id/upcCode"
                     android:text="@string/upc"
                     android:ellipsize="end"
+                    android:lines="1"
                     android:background="@drawable/border_not_editable"
                     android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginRight="5sp"
-                    android:padding="3sp"/>
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5sp"
+                    android:layout_marginStart="5sp"
+                    android:padding="5sp"/>
                 <TextView
                     android:textAlignment="center"
-                    android:layout_weight="2"
-                    android:ellipsize="end"
+                    android:layout_weight="3"
                     android:id="@+id/description"
                     android:text="@string/description"
-                    android:layout_marginRight="5sp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/border_not_editable"
-                    android:padding="3sp"/>
-                <TextView
                     android:ellipsize="end"
+                    android:lines="1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5sp"
+                    android:layout_marginStart="5sp"
+                    android:background="@drawable/border_not_editable"
+                    android:padding="5sp"/>
+                <TextView
                     android:textAlignment="center"
                     android:layout_weight="2"
                     android:id="@+id/quantity"
                     android:text="@string/quantity"
-                    android:layout_marginRight="5sp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
+                    android:ellipsize="end"
+                    android:lines="1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5sp"
+                    android:layout_marginStart="5sp"
                     android:background="@drawable/border_not_editable"
-                    android:padding="3sp"/>
+                    android:padding="5sp"/>
                 <TextView
                     android:textAlignment="center"
                     android:layout_weight="2"
                     android:id="@+id/previousQuantity"
                     android:text="@string/last_quantity"
                     android:ellipsize="end"
-                    android:layout_width="wrap_content"
+                    android:lines="1"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="5sp"
+                    android:layout_marginLeft="5sp"
+                    android:layout_marginRight="5sp"
                     android:background="@drawable/border_not_editable"
-                    android:padding="3sp"/>
+                    android:padding="5sp"/>
 
             </LinearLayout>
             <FrameLayout
