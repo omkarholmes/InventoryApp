@@ -84,8 +84,8 @@ import butterknife.ButterKnife;
 
         setupRecyclerView(new LinearLayoutManager(container.getContext()));
 
-        FloatingActionButton fab = rootView.findViewById(R.id.fab);
-        fab.setOnClickListener(this);
+        /*FloatingActionButton fab = rootView.findViewById(R.id.fab);
+        fab.setOnClickListener(this);*/
 
         loadFileList();
         //showDialog(DIALOG_LOAD_FILE);

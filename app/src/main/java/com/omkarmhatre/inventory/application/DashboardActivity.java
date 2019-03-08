@@ -6,6 +6,8 @@ import android.content.pm.PackageManager;
 import android.speech.RecognitionListener;
 import android.speech.RecognizerIntent;
 import android.speech.SpeechRecognizer;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -18,11 +20,8 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
-
-import com.omkarmhatre.inventory.application.FileExplorer.FileExplorerFragment;
 import com.omkarmhatre.inventory.application.Inventory.InventoryFragment;
 import com.omkarmhatre.inventory.application.PriceBook.PriceBookFragment;
 import com.omkarmhatre.inventory.application.Utils.TextToNumberConverter;
@@ -64,6 +63,23 @@ public class DashboardActivity extends AppCompatActivity implements RecognitionL
         setContentView(R.layout.activity_dashboard);
 
 
+        final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                if(mViewPager.getCurrentItem()==0)
+                {
+                    PriceBookFragment fragment = (PriceBookFragment) mSectionsPagerAdapter.getItem(0);
+                    fragment.showPriceBook();
+                }
+                else {
+                    Snackbar.make(view, "Add New Item", Snackbar.LENGTH_LONG)
+                            .setAction("Action", null).show();
+                }
+            }
+        });
+
         speech = SpeechRecognizer.createSpeechRecognizer(this);
         speech.setRecognitionListener(this);
 
@@ -84,11 +100,30 @@ public class DashboardActivity extends AppCompatActivity implements RecognitionL
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
+        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int i, float v, int i1) {
 
-        final TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
 
-        mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
-        tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
+            }
+
+            @Override
+            public void onPageSelected(int i) {
+                if(i==0)
+                {
+                    fab.setImageDrawable(getDrawable(R.drawable.add));
+                }
+                else
+                {
+                    fab.setImageDrawable(getDrawable(R.drawable.keypad_icon));
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int i) {
+
+            }
+        });
 
     }
 
@@ -135,10 +170,6 @@ public class DashboardActivity extends AppCompatActivity implements RecognitionL
                     mViewPager = (ViewPager) findViewById(R.id.container);
                     mViewPager.setAdapter(mSectionsPagerAdapter);
 
-                    final TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
-
-                    mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
-                    tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
                 } else {
 
                 }

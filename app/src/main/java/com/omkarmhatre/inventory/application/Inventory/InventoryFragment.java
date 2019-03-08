@@ -50,7 +50,7 @@ public class InventoryFragment extends Fragment implements View.OnClickListener{
     @BindView(R.id.quantity)EditText quantity;
     @BindView(R.id.addItem)Button addItem;
     @BindView(R.id.section_label)LinearLayout introText;
-    @BindView(R.id.fab)FloatingActionButton fab;
+    //@BindView(R.id.fab)FloatingActionButton fab;
 
 
     List<InventoryItem> inventoryList = new ArrayList<>();
@@ -86,7 +86,7 @@ public class InventoryFragment extends Fragment implements View.OnClickListener{
     }
 
     private void setOnClickListeners() {
-        fab.setOnClickListener(this);
+        //fab.setOnClickListener(this);
         addItem.setOnClickListener(this);
         quantity.setOnClickListener(this);
     }
