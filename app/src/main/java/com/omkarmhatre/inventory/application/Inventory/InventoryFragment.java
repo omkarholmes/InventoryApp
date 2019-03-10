@@ -6,6 +6,7 @@ import android.hardware.input.InputManager;
 import android.inputmethodservice.Keyboard;
 import android.inputmethodservice.KeyboardView;
 import android.os.Bundle;
+import android.speech.tts.TextToSpeech;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -29,6 +30,8 @@ import com.omkarmhatre.inventory.application.PriceBook.PriceBookEntry;
 import com.omkarmhatre.inventory.application.R;
 import com.omkarmhatre.inventory.application.Utils.AppService;
 import com.omkarmhatre.inventory.application.Utils.PriceBookService;
+import com.omkarmhatre.inventory.application.VoiceListener.SpeechListenerService;
+import com.omkarmhatre.inventory.application.VoiceListener.TextToSpeechConverter;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -65,6 +68,7 @@ public class InventoryFragment extends Fragment implements View.OnClickListener{
     DashboardActivity activity;
     Keyboard keypad;
     boolean inputViaVoice=true;
+    TextToSpeechConverter converter;
 
 
     public InventoryFragment(DashboardActivity activity) {
@@ -92,7 +96,12 @@ public class InventoryFragment extends Fragment implements View.OnClickListener{
         setOnClickListeners();
         setupTextWatcher();
         setupKeypadView();
+        createTextToSpeechConverter();
         return rootView;
+    }
+
+    private void createTextToSpeechConverter() {
+        converter = new TextToSpeechConverter(getContext());
     }
 
 
@@ -194,6 +203,7 @@ public class InventoryFragment extends Fragment implements View.OnClickListener{
     @Override
     public void onResume() {
         super.onResume();
+        //SpeechListenerService.start(this,getContext());
         adapter.notifyDataSetChanged();
     }
 
@@ -267,14 +277,13 @@ public class InventoryFragment extends Fragment implements View.OnClickListener{
                 }
                 if(s.toString().equals(""))
                 {
+                    converter.textInputfound(fragment);
                     return;
                 }
                 addItemInInventoryList(quantity);
             }
         });
     }
-
-
 
     private void setupRecyclerView(LinearLayoutManager linearLayoutManager) {
 
@@ -320,6 +329,7 @@ public class InventoryFragment extends Fragment implements View.OnClickListener{
     @SuppressLint("RestrictedApi")
     private void closeKeyPad() {
         quantity.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.voiceInputOn));
+        SpeechListenerService.start(this,getContext());
         inputViaVoice=true;
         keypadLayout.setVisibility(View.GONE);
         activity.fab.setVisibility(View.VISIBLE);
@@ -342,8 +352,6 @@ public class InventoryFragment extends Fragment implements View.OnClickListener{
         adapter.notifyDataSetChanged();
         clearData();
     }
-
-
 
     private void clearData() {
         upcCode.setText("");
@@ -384,7 +392,10 @@ public class InventoryFragment extends Fragment implements View.OnClickListener{
                 description.setText(pb.getDescription());
                 quantity.requestFocus();
                 //activity.startListening();
-                //SpeechListenerService.start(this,getContext());
+                if(inputViaVoice)
+                {
+                    SpeechListenerService.start(this,getContext());
+                }
                 found = true;
                 break;
             }
@@ -393,17 +404,16 @@ public class InventoryFragment extends Fragment implements View.OnClickListener{
         if(!found)
         {
             //AppService.notifyUser(this.getView(),"New Item Found !");
-
             AppService.notifyUser(getContext(),AppService.ITEM_NOT_FOUND);
             quantity.requestFocus();
         }
-
+        createTextToSpeechConverter();
+        //SpeechListenerService.start(this,getContext());
     }
 
     public void setQuantity(String quantityValue)
     {
         quantity.setText(quantityValue);
     }
-
 
 }

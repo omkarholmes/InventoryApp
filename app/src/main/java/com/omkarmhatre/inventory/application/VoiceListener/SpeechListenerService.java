@@ -8,6 +8,7 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.speech.RecognitionListener;
+import android.speech.RecognitionService;
 import android.speech.RecognizerIntent;
 import android.speech.SpeechRecognizer;
 import android.speech.tts.TextToSpeech;
@@ -27,7 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-public class SpeechListenerService extends Service  implements RecognitionListener {
+public class SpeechListenerService extends RecognitionService  implements RecognitionListener{
 
     private static InventoryFragment fragment;
     private static Context context;
@@ -39,7 +40,7 @@ public class SpeechListenerService extends Service  implements RecognitionListen
     private static final int REQUEST_RECORD_PERMISSION = 100;
     int res;
 
-    TextToSpeech  toSpeech;
+    private TextToSpeechConverter converter;
 
     public static void start(InventoryFragment fragment, Context context)
     {
@@ -49,11 +50,21 @@ public class SpeechListenerService extends Service  implements RecognitionListen
 
     }
 
-    @Nullable
     @Override
-    public IBinder onBind(Intent intent) {
-        return null;
+    protected void onStartListening(Intent recognizerIntent, Callback listener) {
+
     }
+
+    @Override
+    protected void onCancel(Callback listener) {
+
+    }
+
+    @Override
+    protected void onStopListening(Callback listener) {
+
+    }
+
 
     @Override
     public void onCreate() {
@@ -68,15 +79,29 @@ public class SpeechListenerService extends Service  implements RecognitionListen
         recognizerIntent.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 3);
 
         speech.startListening(recognizerIntent);
+        converter = new TextToSpeechConverter(this);
 
     }
 
     @Override
     public void onResults(Bundle results) {
         Log.wtf(LOG_TAG,results.toString());
-        String quantity=TextToNumberConverter.replaceNumbers(results.getString(SpeechRecognizer.RESULTS_RECOGNITION));
-        Toast.makeText(context,quantity,Toast.LENGTH_LONG).show();
+
+//        String quantity=TextToNumberConverter.replaceNumbers(results.getString(SpeechRecognizer.RESULTS_RECOGNITION));
+//        Toast.makeText(context,quantity,Toast.LENGTH_LONG).show();
+
+        ArrayList<String> matches = results.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
+        String quantity = "";
+        for (String result : matches)
+            if(isNumber(result))
+            {
+                quantity += result + "";
+            }
+        //text=TextToNumberConverter.replaceNumbers(text);
+
+        converter.speakSpeech(quantity);
         SpeechListenerService.fragment.setQuantity(quantity);
+        stopService(new Intent(this, SpeechListenerService.class));
     }
 
 
@@ -109,10 +134,7 @@ public class SpeechListenerService extends Service  implements RecognitionListen
     public void onError(int errorCode) {
         String errorMessage = getErrorText(errorCode);
         Toast.makeText(this,errorMessage,Toast.LENGTH_LONG).show();
-        if(errorMessage.equalsIgnoreCase("No speech input"))
-        {
-
-        }
+        stopService(new Intent(this,SpeechListenerService.class));
     }
 
 
@@ -171,6 +193,20 @@ public class SpeechListenerService extends Service  implements RecognitionListen
         i.putExtra(RecognizerIntent.EXTRA_PROMPT,"Say Something !");
 
         return i;
+    }
+
+    private boolean isNumber(String word)
+    {
+        boolean isNumber = false;
+        try
+        {
+            Integer.parseInt(word);
+            isNumber = true;
+        } catch (NumberFormatException e)
+        {
+            isNumber = false;
+        }
+        return isNumber;
     }
 
 }

@@ -31,6 +31,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".VoiceListener.VoiceListener"/>
+
+        <service android:name=".VoiceListener.SpeechListenerService" />
     </application>
 
 </manifest>
