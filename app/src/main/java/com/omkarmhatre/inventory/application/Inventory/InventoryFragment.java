@@ -41,7 +41,7 @@ import butterknife.ButterKnife;
 import static com.omkarmhatre.inventory.application.R.color.voiceInputOff;
 
 /**
- * A placeholder fragment containing a simple view.
+ * A Inventory fragment containing a simple view.
  */
 @SuppressLint("ValidFragment")
 public class InventoryFragment extends Fragment implements View.OnClickListener{
@@ -95,6 +95,10 @@ public class InventoryFragment extends Fragment implements View.OnClickListener{
         return rootView;
     }
 
+
+    /**
+     * Setting Up the Custom Keyboard View
+     */
     private void setupKeypadView() {
         // Create the Keyboard
         keypad= new Keyboard(getContext(),R.xml.numeric_keypad);
@@ -182,7 +186,9 @@ public class InventoryFragment extends Fragment implements View.OnClickListener{
     @Override
     public void onPause() {
         super.onPause();
-        keypadLayout.setVisibility(View.GONE);
+        closeKeyPad();
+        //keypadLayout.setVisibility(View.GONE);
+
     }
 
     @Override
@@ -277,7 +283,6 @@ public class InventoryFragment extends Fragment implements View.OnClickListener{
         recyclerView.setAdapter(adapter);
     }
 
-    @SuppressLint("RestrictedApi")
     @Override
     public void onClick(View v) {
 
@@ -295,12 +300,7 @@ public class InventoryFragment extends Fragment implements View.OnClickListener{
                 break;
             }
             case R.id.closeKeyPad: {
-                quantity.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.voiceInputOn));
-                inputViaVoice=true;
-                keypadLayout.setVisibility(View.GONE);
-                activity.fab.setVisibility(View.VISIBLE);
-                description.setVisibility(View.VISIBLE);
-                closeKeyPad.setVisibility(View.GONE);
+                closeKeyPad();
                 adapter.notifyDataSetChanged();
                 break;
             }
@@ -315,6 +315,16 @@ public class InventoryFragment extends Fragment implements View.OnClickListener{
                 imm.hideSoftInputFromWindow(v.getWindowToken(),0);
             }
         }
+    }
+
+    @SuppressLint("RestrictedApi")
+    private void closeKeyPad() {
+        quantity.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.voiceInputOn));
+        inputViaVoice=true;
+        keypadLayout.setVisibility(View.GONE);
+        activity.fab.setVisibility(View.VISIBLE);
+        description.setVisibility(View.VISIBLE);
+        closeKeyPad.setVisibility(View.GONE);
     }
 
     private void addItemInInventoryList(View view)
@@ -352,6 +362,7 @@ public class InventoryFragment extends Fragment implements View.OnClickListener{
             {
                 newItem.setLastQuantity(item.getQuantity());
                 newItem.setQuantity(newItem.getQuantity()+item.getQuantity());
+                AppService.notifyUser(getContext(),AppService.ITEM_FOUND);
                 iterator.remove();
             }
             else
@@ -382,6 +393,8 @@ public class InventoryFragment extends Fragment implements View.OnClickListener{
         if(!found)
         {
             //AppService.notifyUser(this.getView(),"New Item Found !");
+
+            AppService.notifyUser(getContext(),AppService.ITEM_NOT_FOUND);
             quantity.requestFocus();
         }
 

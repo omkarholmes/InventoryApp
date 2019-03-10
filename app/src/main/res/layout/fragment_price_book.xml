@@ -92,7 +92,6 @@
             android:background="@color/background"
             android:id="@+id/recyclerView"
             android:visibility="gone"
-            android:animateLayoutChanges="true"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
     </FrameLayout>
