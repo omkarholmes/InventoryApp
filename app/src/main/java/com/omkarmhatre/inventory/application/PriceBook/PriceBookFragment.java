@@ -25,6 +25,7 @@ import android.widget.TextView;
 
 import com.omkarmhatre.inventory.application.FileExplorer.FileExplorer;
 import com.omkarmhatre.inventory.application.FileExplorer.FileExplorerFragment;
+import com.omkarmhatre.inventory.application.Inventory.InventoryFragment;
 import com.omkarmhatre.inventory.application.R;
 import com.omkarmhatre.inventory.application.Utils.AppService;
 import com.omkarmhatre.inventory.application.Utils.PriceBookService;
@@ -46,6 +47,7 @@ import butterknife.ButterKnife;
      @BindView(R.id.recyclerView)RecyclerView recyclerView;
      @BindView(R.id.section_label)LinearLayout introText;
 
+     private static PriceBookFragment fragment;
      List<PriceBookEntry> priceBook =PriceBookService.getInstance().getPriceBook();
     PriceBookAdapter priceBookListAdapter;
 
@@ -59,7 +61,6 @@ import butterknife.ButterKnife;
     private Item[] fileList;
     private File path = new File(Environment.getExternalStorageDirectory() + "");
     private String chosenFile;
-    private static final int DIALOG_LOAD_FILE = 1000;
     ListAdapter fileExploreAdapter;
 
 
@@ -72,7 +73,9 @@ import butterknife.ButterKnife;
      * number.
      */
     public static Fragment newInstance() {
-        PriceBookFragment fragment = new PriceBookFragment();
+        if(fragment == null) {
+            fragment=new PriceBookFragment();
+        }
         return fragment;
     }
 
@@ -197,7 +200,7 @@ import butterknife.ButterKnife;
         }
     }
 
-    protected Dialog showDialog(int id) {
+    public Dialog showDialog() {
         Dialog dialog = null;
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
 
@@ -206,9 +209,9 @@ import butterknife.ButterKnife;
             dialog = builder.create();
             return dialog;
         }
-
+        int id=0;
         switch (id) {
-            case DIALOG_LOAD_FILE:
+            default:
                 builder.setTitle("Choose your file");
                 builder.setAdapter(fileExploreAdapter, new DialogInterface.OnClickListener() {
                     @Override
@@ -226,7 +229,7 @@ import butterknife.ButterKnife;
                             loadFileList();
 
                             //removeDialog(DIALOG_LOAD_FILE);
-                            showDialog(DIALOG_LOAD_FILE);
+                            showDialog();
                             Log.d(TAG, path.getAbsolutePath());
 
                         }
@@ -250,7 +253,7 @@ import butterknife.ButterKnife;
                             loadFileList();
 
                             //removeDialog(DIALOG_LOAD_FILE);
-                            showDialog(DIALOG_LOAD_FILE);
+                            showDialog();
                             Log.d(TAG, path.getAbsolutePath());
 
                         }
@@ -292,7 +295,7 @@ import butterknife.ButterKnife;
     @Override
     public void onClick(View v) {
 
-        showDialog(DIALOG_LOAD_FILE);
+        showDialog();
 
         //startActivity(new Intent(getContext(),BluetoothConnector.class));
     }

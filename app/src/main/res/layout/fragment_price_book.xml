@@ -10,7 +10,7 @@
         android:id="@+id/pageHeading"
         android:layout_alignParentTop="true"
         android:background="@color/colorAccent"
-        android:padding="1sp"
+        android:padding="2sp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -22,11 +22,9 @@
             android:layout_weight="1.5"
             android:id="@+id/upcCode"
             android:text="@string/upc"
-            android:background="@drawable/border_not_editable"
+            android:background="@drawable/border_editable"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5sp"
-            android:layout_marginLeft="5sp"
             android:padding="4sp"/>
         <TextView
             android:textSize="17sp"
@@ -36,8 +34,8 @@
             android:text="@string/description"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_margin="5sp"
-            android:background="@drawable/border_not_editable"
+            android:layout_marginLeft="2sp"
+            android:background="@drawable/border_editable"
             android:padding="4sp"/>
 
     </LinearLayout>
@@ -47,6 +45,7 @@
         android:layout_marginTop="1sp"
         android:layout_below="@+id/pageHeading"
         android:background="@color/white"
+        android:animateLayoutChanges="true"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <LinearLayout
@@ -93,6 +92,7 @@
             android:background="@color/background"
             android:id="@+id/recyclerView"
             android:visibility="gone"
+            android:animateLayoutChanges="true"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
     </FrameLayout>

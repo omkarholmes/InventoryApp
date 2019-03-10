@@ -5,7 +5,7 @@
     <string name="tab_text_1">Price Book</string>
     <string name="tap">Tap</string>
     <string name="to_import_price_book">to Import Price Book</string>
-    <string name="to_add_item">to Add Item</string>
+    <string name="add_item">Add Item</string>
     <string name="tab_text_2">Inventory</string>
     <string name="action_settings">Settings</string>
     <string name="section_format">Welcome to %1$s section.</string>

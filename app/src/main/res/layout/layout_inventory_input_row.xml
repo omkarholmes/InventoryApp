@@ -9,8 +9,7 @@
         android:padding="1sp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:weightSum="8">
+        android:orientation="horizontal">
 
         <EditText
             android:textAlignment="center"
@@ -19,15 +18,13 @@
             android:lines="1"
             android:ellipsize="end"
             android:hint="@string/upc"
-            android:visibility="gone"
-            android:inputType="number"
+            android:inputType="none"
             android:maxLength="13"
+            android:padding="1sp"
             android:background="@drawable/border_editable"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5sp"
-            android:layout_marginStart="5sp"
-            android:padding="5sp"/>
+            android:layout_marginLeft="1sp"/>
         <TextView
             android:textAlignment="center"
             android:layout_weight="4"
@@ -38,26 +35,31 @@
             android:textSize="18sp"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_marginTop="5sp"
-            android:layout_marginStart="5sp"
-            android:background="@drawable/border_not_editable"
-            android:padding="5sp"/>
-
-        <EditText
-            android:ellipsize="end"
-            android:textAlignment="center"
-            android:layout_weight="2"
-            android:id="@+id/quantity"
-            android:lines="1"
-            android:hint="@string/quantity"
-            android:inputType="number"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5sp"
-            android:layout_marginLeft="5sp"
-            android:layout_marginRight="5sp"
             android:background="@drawable/border_editable"
-            android:padding="5sp"/>
+            android:layout_marginLeft="2sp"/>
+
+        <LinearLayout
+            android:layout_weight="2"
+            android:padding="1sp"
+            android:background="@drawable/border_editable"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="2sp"
+            android:layout_marginRight="1sp">
+            <EditText
+                android:ellipsize="end"
+                android:textAlignment="center"
+                android:id="@+id/quantity"
+                android:lines="1"
+                android:hint="@string/quantity"
+                android:inputType="none"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/voiceInputOn"
+                />
+        </LinearLayout>
+
+
 
     </LinearLayout>
 

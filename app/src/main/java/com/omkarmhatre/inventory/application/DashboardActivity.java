@@ -1,8 +1,10 @@
 package com.omkarmhatre.inventory.application;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.speech.RecognitionListener;
 import android.speech.RecognizerIntent;
 import android.speech.SpeechRecognizer;
@@ -21,6 +23,7 @@ import android.support.v4.view.ViewPager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Toast;
 import com.omkarmhatre.inventory.application.Inventory.InventoryFragment;
 import com.omkarmhatre.inventory.application.PriceBook.PriceBookFragment;
@@ -31,7 +34,7 @@ import com.omkarmhatre.inventory.application.VoiceListener.VoiceListener;
 import java.util.ArrayList;
 import java.util.Locale;
 
-public class DashboardActivity extends AppCompatActivity implements RecognitionListener {
+public class DashboardActivity extends AppCompatActivity implements View.OnClickListener,RecognitionListener {
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -55,7 +58,7 @@ public class DashboardActivity extends AppCompatActivity implements RecognitionL
 
     private SpeechRecognizer speech=null;
     private Intent recognizerIntent;
-    Fragment fragment;
+    public FloatingActionButton fab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,22 +66,9 @@ public class DashboardActivity extends AppCompatActivity implements RecognitionL
         setContentView(R.layout.activity_dashboard);
 
 
-        final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                if(mViewPager.getCurrentItem()==0)
-                {
-                    PriceBookFragment fragment = (PriceBookFragment) mSectionsPagerAdapter.getItem(0);
-                    fragment.showPriceBook();
-                }
-                else {
-                    Snackbar.make(view, "Add New Item", Snackbar.LENGTH_LONG)
-                            .setAction("Action", null).show();
-                }
-            }
-        });
+        fab = findViewById(R.id.fab);
+        fab.setOnClickListener(this);
+        //fab.setVisibility(View.GONE);
 
         speech = SpeechRecognizer.createSpeechRecognizer(this);
         speech.setRecognitionListener(this);
@@ -167,13 +157,11 @@ public class DashboardActivity extends AppCompatActivity implements RecognitionL
                     mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
                     // Set up the ViewPager with the sections adapter.
-                    mViewPager = (ViewPager) findViewById(R.id.container);
+                    mViewPager = findViewById(R.id.container);
                     mViewPager.setAdapter(mSectionsPagerAdapter);
 
-                } else {
-
                 }
-
+                break;
             }
             case REQUEST_BLUETOOTH_PERMISSION: {
 
@@ -268,7 +256,7 @@ public class DashboardActivity extends AppCompatActivity implements RecognitionL
             text += result + " ";
         String quantity=TextToNumberConverter.replaceNumbers(text);
         Toast.makeText(this,quantity,Toast.LENGTH_LONG).show();
-        ((InventoryFragment)fragment).setQuantity(quantity);
+        ((InventoryFragment)mSectionsPagerAdapter.getItem(1)).setQuantity(quantity);
     }
 
     @Override
@@ -278,6 +266,31 @@ public class DashboardActivity extends AppCompatActivity implements RecognitionL
 
     @Override
     public void onEvent(int eventType, Bundle params) {
+
+    }
+
+    @SuppressLint("RestrictedApi")
+    @Override
+    public void onClick(View v) {
+
+        switch(v.getId())
+        {
+            case R.id.fab : {
+                switch (mViewPager.getCurrentItem())
+                {
+                    case 0 :{
+                        PriceBookFragment fragment = (PriceBookFragment) mSectionsPagerAdapter.getItem(0);
+                        fragment.showDialog();;
+                        break;
+                    }
+                    case 1:{
+                        fab.setVisibility(View.GONE);
+                        InventoryFragment fragment =(InventoryFragment) mSectionsPagerAdapter.getItem(1);
+                        fragment.showKeyPad();
+                    }
+                }
+            }
+        }
 
     }
 
@@ -295,7 +308,7 @@ public class DashboardActivity extends AppCompatActivity implements RecognitionL
         public Fragment getItem(int position) {
             // getItem is called to instantiate the fragment for the given page.
             // Return a PlaceholderFragment (defined as a static inner class below).
-            fragment= null;
+            Fragment fragment= null;
             switch (position)
             {
                 case 0 :

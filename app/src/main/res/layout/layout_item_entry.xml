@@ -22,8 +22,7 @@
             android:background="@drawable/border_editable"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5sp"
-            android:layout_marginStart="5sp"
+            android:layout_margin="1sp"
             android:padding="5sp"/>
         <TextView
             android:textAlignment="center"
@@ -34,8 +33,7 @@
             android:lines="1"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5sp"
-            android:layout_marginStart="5sp"
+            android:layout_margin="1sp"
             android:background="@drawable/border_editable"
             android:padding="5sp"/>
         <TextView
@@ -47,8 +45,7 @@
             android:lines="1"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5sp"
-            android:layout_marginStart="5sp"
+            android:layout_margin="1sp"
             android:background="@drawable/border_editable"
             android:padding="5sp"/>
         <TextView
@@ -60,9 +57,7 @@
             android:lines="1"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5sp"
-            android:layout_marginLeft="5sp"
-            android:layout_marginRight="5sp"
+            android:layout_margin="1sp"
             android:background="@drawable/border_editable"
             android:padding="5sp"/>
 

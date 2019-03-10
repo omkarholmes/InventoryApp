@@ -6,11 +6,11 @@
     android:layout_height="wrap_content">
 
     <LinearLayout
-    android:padding="4sp"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:weightSum="5">
+        android:padding="1sp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="5">
 
         <LinearLayout
             android:layout_weight="1.5"
@@ -27,14 +27,10 @@
                 android:background="@drawable/border_price_book"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="5sp"
-                android:layout_marginLeft="5sp"
                 android:padding="5sp"/>
         </LinearLayout>
         <LinearLayout
             android:layout_weight="3.5"
-            android:layout_margin="5sp"
-            android:paddingLeft="5sp"
             android:orientation="horizontal"
             android:layout_width="0dp"
             android:layout_height="wrap_content">
@@ -47,7 +43,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingLeft="10sp"
-                android:layout_marginLeft="3sp"
+                android:layout_marginLeft="2sp"
                 android:padding="5sp"/>
 
         </LinearLayout>
