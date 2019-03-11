@@ -203,6 +203,7 @@ public class InventoryFragment extends Fragment implements View.OnClickListener{
     @Override
     public void onResume() {
         super.onResume();
+        closeKeyPad();
         //SpeechListenerService.start(this,getContext());
         adapter.notifyDataSetChanged();
     }
@@ -277,7 +278,7 @@ public class InventoryFragment extends Fragment implements View.OnClickListener{
                 }
                 if(s.toString().equals(""))
                 {
-                    converter.textInputfound(fragment);
+                    //converter.textInputFound(fragment);
                     return;
                 }
                 addItemInInventoryList(quantity);
@@ -328,8 +329,11 @@ public class InventoryFragment extends Fragment implements View.OnClickListener{
 
     @SuppressLint("RestrictedApi")
     private void closeKeyPad() {
-        quantity.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.voiceInputOn));
-        SpeechListenerService.start(this,getContext());
+        if (this.isResumed() && getActivity().getCurrentFocus().getId() == quantity.getId() )
+        {
+            quantity.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.voiceInputOn));
+            SpeechListenerService.start(this,getContext());
+        }
         inputViaVoice=true;
         keypadLayout.setVisibility(View.GONE);
         activity.fab.setVisibility(View.VISIBLE);

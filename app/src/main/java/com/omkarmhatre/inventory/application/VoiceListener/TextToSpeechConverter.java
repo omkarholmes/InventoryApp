@@ -88,7 +88,7 @@ public class TextToSpeechConverter {
 
     }
 
-    public void textInputfound(Fragment fragment)
+    public void textInputFound(Fragment fragment)
     {
      this.fragment=fragment;
      speakSpeech(textInputFound);
