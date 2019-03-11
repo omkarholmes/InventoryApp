@@ -417,7 +417,14 @@ public class InventoryFragment extends Fragment implements View.OnClickListener{
 
     public void setQuantity(String quantityValue)
     {
-        quantity.setText(quantityValue);
+        if(quantityValue.equals(""))
+        {
+            converter.textInputFound(fragment);
+        }
+        else
+        {
+            quantity.setText(quantityValue);
+        }
     }
 
 }

@@ -98,15 +98,7 @@ public class SpeechListenerService extends RecognitionService  implements Recogn
                 quantity += result + "";
             }
         //text=TextToNumberConverter.replaceNumbers(text);
-        if(!quantity.equals(""))
-        {
-            converter.speakSpeech(quantity);
-        }
-        else
-        {
-            converter.textInputFound(fragment);
-            return;
-        }
+        converter.speakSpeech(quantity);
         SpeechListenerService.fragment.setQuantity(quantity);
         stopService(new Intent(this, SpeechListenerService.class));
     }

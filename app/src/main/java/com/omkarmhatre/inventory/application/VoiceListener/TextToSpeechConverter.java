@@ -22,7 +22,7 @@ public class TextToSpeechConverter {
 
     public TextToSpeechConverter(final Context context) {
 
-        this.context = context;
+        this.context=context;
         converter = new TextToSpeech(context, new TextToSpeech.OnInitListener() {
             @Override
             public void onInit(int status) {
@@ -36,11 +36,9 @@ public class TextToSpeechConverter {
 
                         @Override
                         public void onDone(String utteranceId) {
-                            if(utteranceId.equals(textInputFound))
-                            {
-                                SpeechListenerService.start((InventoryFragment)fragment,context);
+                            if(utteranceId.equals(textInputFound)) {
+                                SpeechListenerService.start((InventoryFragment) fragment,context);
                             }
-
                         }
 
                         @Override
@@ -67,7 +65,7 @@ public class TextToSpeechConverter {
         {
             if((ttsSupported == TextToSpeech.LANG_MISSING_DATA) || (ttsSupported == TextToSpeech.LANG_NOT_SUPPORTED))
             {
-                Toast.makeText(context,"Feature not supported.",Toast.LENGTH_SHORT);
+                //Toast.makeText(context,"Feature not supported.",Toast.LENGTH_SHORT);
             }
             else
             {
