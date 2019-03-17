@@ -267,7 +267,6 @@ import butterknife.ButterKnife;
                             //File priceBookFile=fileExplorer.explore();
                             try {
                                 //Read File
-
                                 PriceBookService.getInstance().setPriceBook(fileExplorer.readCSVFile(sel));
                                 if(priceBook.isEmpty())
                                 {
