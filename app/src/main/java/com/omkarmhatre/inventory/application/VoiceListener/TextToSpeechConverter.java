@@ -19,7 +19,6 @@ public class TextToSpeechConverter {
     String textInputFound="Please Input Numbers Only !!";
     Fragment fragment;
 
-
     public TextToSpeechConverter(final Context context) {
 
         this.context=context;
