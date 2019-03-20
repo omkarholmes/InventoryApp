@@ -16,6 +16,7 @@ import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
@@ -29,6 +30,7 @@ import com.omkarmhatre.inventory.application.DashboardActivity;
 import com.omkarmhatre.inventory.application.PriceBook.PriceBookEntry;
 import com.omkarmhatre.inventory.application.R;
 import com.omkarmhatre.inventory.application.Utils.AppService;
+import com.omkarmhatre.inventory.application.Utils.InventoryService;
 import com.omkarmhatre.inventory.application.Utils.PriceBookService;
 import com.omkarmhatre.inventory.application.VoiceListener.SpeechListenerService;
 import com.omkarmhatre.inventory.application.VoiceListener.TextToSpeechConverter;
@@ -47,7 +49,7 @@ import static com.omkarmhatre.inventory.application.R.color.voiceInputOff;
  * A Inventory fragment containing a simple view.
  */
 @SuppressLint("ValidFragment")
-public class InventoryFragment extends Fragment implements View.OnClickListener{
+public class InventoryFragment extends Fragment implements View.OnClickListener,View.OnTouchListener{
     /**
      * The fragment argument representing the section number for this
      * fragment.
@@ -91,13 +93,20 @@ public class InventoryFragment extends Fragment implements View.OnClickListener{
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_inventory, container, false);
         ButterKnife.bind(this,rootView);
-        upcCode.requestFocus();
         setupRecyclerView(new LinearLayoutManager(container.getContext()));
         setOnClickListeners();
+        setOnTouchListeners();
         setupTextWatcher();
         setupKeypadView();
         createTextToSpeechConverter();
+        InventoryService.getInstance().writeIntoFile();
         return rootView;
+    }
+
+    private void setOnTouchListeners() {
+        upcCode.setOnTouchListener(this);
+        quantity.setOnTouchListener(this);
+        upcCode.requestFocus();
     }
 
     private void createTextToSpeechConverter() {
@@ -126,13 +135,12 @@ public class InventoryFragment extends Fragment implements View.OnClickListener{
                 //Here check the primaryCode to see which key is pressed
                 //based on the android:codes property
                 View v = getActivity().getCurrentFocus();
-                String result="";
+                String result;
                 result=((EditText)v).getText().toString();
-
                 switch (primaryCode)
                 {
                     case -1:{
-                        if(result.length()==1)
+                        if(result.length() <=1)
                         {
                             result="";
                         }
@@ -155,7 +163,6 @@ public class InventoryFragment extends Fragment implements View.OnClickListener{
                             checkUpcInPriceBook(result);
                         }
 
-
                         break;
                     }
                     default:{
@@ -163,7 +170,10 @@ public class InventoryFragment extends Fragment implements View.OnClickListener{
                         ((EditText)v).setText(result);
                     }
                 }
-
+                if(result.length()>13)
+                {
+                    return;
+                }
                 ((EditText)v).setSelection(result.length());
 
 
@@ -196,14 +206,17 @@ public class InventoryFragment extends Fragment implements View.OnClickListener{
     public void onPause() {
         super.onPause();
         closeKeyPad();
+        InventoryService.getInstance().writeToCSV(inventoryList);
         //keypadLayout.setVisibility(View.GONE);
 
     }
 
+    @SuppressLint("RestrictedApi")
     @Override
     public void onResume() {
         super.onResume();
         closeKeyPad();
+        activity.fab.setVisibility(View.VISIBLE);
         //SpeechListenerService.start(this,getContext());
         adapter.notifyDataSetChanged();
     }
@@ -220,10 +233,8 @@ public class InventoryFragment extends Fragment implements View.OnClickListener{
     }
 
     private void setOnClickListeners() {
-        upcCode.setOnClickListener(this);
         closeKeyPad.setOnClickListener(this);
         addItem.setOnClickListener(this);
-        quantity.setOnClickListener(this);
     }
 
     private void setupTextWatcher() {
@@ -245,7 +256,7 @@ public class InventoryFragment extends Fragment implements View.OnClickListener{
                 {
                     return;
                 }
-                if(s.toString().equals("") )
+                if(s.toString().equals("") && s.toString().length()<=12)
                 {
                     return;
                 }
@@ -314,12 +325,6 @@ public class InventoryFragment extends Fragment implements View.OnClickListener{
                 adapter.notifyDataSetChanged();
                 break;
             }
-            case R.id.upcCode | R.id.quantity:{
-                InputMethodManager imm =(InputMethodManager)getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(v.getWindowToken(),0);
-                showKeyPad();
-                break;
-            }
             default:{
                 InputMethodManager imm =(InputMethodManager)getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(v.getWindowToken(),0);
@@ -345,8 +350,17 @@ public class InventoryFragment extends Fragment implements View.OnClickListener{
     {
         if(upcCode.getText().toString().equals("") || quantity.getText().toString().equals(""))
         {
-            AppService.notifyUser(view,"UPC / Quantity Required ");
-            clearData();
+            if(upcCode.getText().toString().equals(""))
+            {
+                AppService.notifyUser(view,"UPC / Quantity Required ");
+                clearData();
+            }
+            if(quantity.getText().toString().equals(""))
+            {
+                AppService.notifyUser(view,"Quantity Required ");
+                quantity.setText("");
+                quantity.requestFocus();
+            }
             return;
         }
         introText.setVisibility(View.GONE);
@@ -385,6 +399,7 @@ public class InventoryFragment extends Fragment implements View.OnClickListener{
         Collections.reverse(inventoryList);
         inventoryList.add(newItem);
         Collections.reverse(inventoryList);
+        InventoryService.getInstance().writeToCSV(inventoryList);
 
     }
 
@@ -403,7 +418,7 @@ public class InventoryFragment extends Fragment implements View.OnClickListener{
                 found = true;
                 break;
             }
-            description.setText("");
+            description.setText("N/A");
         }
         if(!found)
         {
@@ -427,4 +442,12 @@ public class InventoryFragment extends Fragment implements View.OnClickListener{
         }
     }
 
+    @Override
+    public boolean onTouch(View v, MotionEvent event) {
+        ((EditText)v).requestFocus();
+        InputMethodManager imm =(InputMethodManager)getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(v.getWindowToken(),0);
+        showKeyPad();
+        return true;
+    }
 }

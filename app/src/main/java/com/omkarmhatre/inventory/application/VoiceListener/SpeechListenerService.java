@@ -1,31 +1,18 @@
 package com.omkarmhatre.inventory.application.VoiceListener;
 
-import android.Manifest;
-import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.os.IBinder;
 import android.speech.RecognitionListener;
 import android.speech.RecognitionService;
 import android.speech.RecognizerIntent;
 import android.speech.SpeechRecognizer;
-import android.speech.tts.TextToSpeech;
-import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.widget.Toast;
 
 import com.omkarmhatre.inventory.application.Inventory.InventoryFragment;
-import com.omkarmhatre.inventory.application.Utils.AppService;
-import com.omkarmhatre.inventory.application.Utils.TextToNumberConverter;
-
-import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
 
 public class SpeechListenerService extends RecognitionService  implements RecognitionListener{
@@ -182,16 +169,6 @@ public class SpeechListenerService extends RecognitionService  implements Recogn
                 break;
         }
         return message;
-    }
-
-
-    public Intent promptSpeech() {
-        Intent i = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
-        i.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
-        i.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault());
-        i.putExtra(RecognizerIntent.EXTRA_PROMPT,"Say Something !");
-
-        return i;
     }
 
     private boolean isNumber(String word)

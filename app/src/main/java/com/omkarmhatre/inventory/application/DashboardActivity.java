@@ -28,32 +28,20 @@ import android.widget.Toast;
 import com.omkarmhatre.inventory.application.Inventory.InventoryFragment;
 import com.omkarmhatre.inventory.application.PriceBook.PriceBookFragment;
 import com.omkarmhatre.inventory.application.Utils.TextToNumberConverter;
-import com.omkarmhatre.inventory.application.VoiceListener.SpeechListenerService;
-import com.omkarmhatre.inventory.application.VoiceListener.VoiceListener;
 
 import java.util.ArrayList;
 import java.util.Locale;
 
 public class DashboardActivity extends AppCompatActivity implements View.OnClickListener,RecognitionListener {
 
-    /**
-     * The {@link android.support.v4.view.PagerAdapter} that will provide
-     * fragments for each of the sections. We use a
-     * {@link FragmentPagerAdapter} derivative, which will keep every
-     * loaded fragment in memory. If this becomes too memory intensive, it
-     * may be best to switch to a
-     * {@link android.support.v4.app.FragmentStatePagerAdapter}.
-     */
     private SectionsPagerAdapter mSectionsPagerAdapter;
 
-    /**
-     * The {@link ViewPager} that will host the section contents.
-     */
     private ViewPager mViewPager;
 
     private static final int REQUEST_RECORD_PERMISSION = 100;
     private static final int REQUEST_READ_EXTERNAL_STORAGE_PERMISSION = 110;
-    private static final int REQUEST_BLUETOOTH_PERMISSION = 120;
+    private static final int REQUEST_WRITE_EXTERNAL_STORAGE_PERMISSION = 120;
+    private static final int REQUEST_BLUETOOTH_PERMISSION = 130;
     private String LOG_TAG="Voice";
 
     private SpeechRecognizer speech=null;
@@ -81,9 +69,11 @@ public class DashboardActivity extends AppCompatActivity implements View.OnClick
         //Permissions
 
         askForPermission(Manifest.permission.READ_EXTERNAL_STORAGE,REQUEST_READ_EXTERNAL_STORAGE_PERMISSION);
-        askForPermission(Manifest.permission.BLUETOOTH,REQUEST_BLUETOOTH_PERMISSION);
+        askForPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE,REQUEST_WRITE_EXTERNAL_STORAGE_PERMISSION);
+        //askForPermission(Manifest.permission.BLUETOOTH,REQUEST_BLUETOOTH_PERMISSION);
         askForPermission(Manifest.permission.RECORD_AUDIO,REQUEST_RECORD_PERMISSION);
-        // Create the adapter that will return a fragment for each of the three
+
+        // Create the adapter that will return a fragment for each of the
         // primary sections of the activity.
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
@@ -93,8 +83,6 @@ public class DashboardActivity extends AppCompatActivity implements View.OnClick
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int i, float v, int i1) {
-
-
             }
 
             @Override
@@ -120,9 +108,6 @@ public class DashboardActivity extends AppCompatActivity implements View.OnClick
     private void askForPermission(String permission, Integer requestCode) {
         if (ContextCompat.checkSelfPermission(DashboardActivity.this, permission) != PackageManager.PERMISSION_GRANTED) {
 
-
-
-            // Should we show an explanation?
             if (ActivityCompat.shouldShowRequestPermissionRationale(DashboardActivity.this, permission)) {
 
                 //This is called if user has denied the permission before
@@ -294,10 +279,6 @@ public class DashboardActivity extends AppCompatActivity implements View.OnClick
 
     }
 
-    /**
-     * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
-     * one of the sections/tabs/pages.
-     */
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
         public SectionsPagerAdapter(FragmentManager fm) {

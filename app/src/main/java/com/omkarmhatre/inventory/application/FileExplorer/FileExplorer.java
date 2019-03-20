@@ -138,7 +138,7 @@ public class FileExplorer {
         {
             //Spliting the line by ','
             String[] tokens =line.split(",");
-            if(tokens.length == 2)
+            if(tokens.length >=2)
             {
                 PriceBookEntry newEntry = new PriceBookEntry(tokens[0],tokens[1]);
                 priceBook.add(newEntry);

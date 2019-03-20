@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/colorAccent"
+    android:weightSum="4">
+
+    <LinearLayout
+        android:padding="10sp"
+        android:layout_weight="1"
+        android:id="@+id/upcEntry"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:background="@drawable/border_editable"
+            android:text="UPC"
+            android:textColor="@color/colorAccent"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:textSize="20sp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:padding="10sp"
+        android:layout_weight="1"
+        android:id="@+id/descriptionEntry"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:background="@drawable/border_editable"
+            android:textColor="@color/colorAccent"
+            android:textStyle="bold"
+            android:text="Description"
+            android:gravity="center"
+            android:textSize="20sp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_weight="1"
+        android:orientation="horizontal"
+        android:id="@+id/quantityEntry"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:padding="10sp"
+            android:orientation="vertical"
+            android:layout_weight="1"
+            android:id="@+id/prevQuantityEntry"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <TextView
+                android:background="@drawable/border_editable"
+                android:textStyle="bold"
+                android:textColor="@color/colorAccent"
+                android:text="Previous"
+                android:gravity="center"
+                android:textSize="20sp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+        </LinearLayout>
+        <LinearLayout
+            android:padding="10sp"
+            android:orientation="vertical"
+            android:layout_weight="1"
+            android:id="@+id/currentQuantityEntry"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <EditText
+                android:background="@drawable/border_editable"
+                android:textStyle="bold"
+                android:textColor="@color/colorAccent"
+                android:text="Current"
+                android:gravity="center"
+                android:textSize="21sp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+        </LinearLayout>
+        <LinearLayout
+            android:padding="10sp"
+            android:orientation="vertical"
+            android:layout_weight="1"
+            android:id="@+id/totalQuantityEntry"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <TextView
+                android:background="@drawable/border_editable"
+                android:textStyle="bold"
+                android:textColor="@color/colorAccent"
+                android:text="Total"
+                android:gravity="center"
+                android:textSize="20sp"
+                android:layout_gravity="center_horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:background="@color/white"
+        android:layout_weight="1"
+        android:orientation="horizontal"
+        android:id="@+id/screenFunction"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:padding="10sp"
+            android:orientation="vertical"
+            android:layout_weight="1"
+            android:id="@+id/clearFunction"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <TextView
+                android:background="@color/colorAccent"
+                android:textStyle="bold"
+                android:textColor="@color/white"
+                android:text="Clear"
+                android:gravity="center"
+                android:textSize="25sp"
+                android:layout_gravity="center_horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+        </LinearLayout>
+        <LinearLayout
+            android:padding="10sp"
+            android:orientation="vertical"
+            android:layout_weight="1"
+            android:id="@+id/deleteFunction"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <TextView
+                android:background="@color/colorAccent"
+                android:textStyle="bold"
+                android:textColor="@color/white"
+                android:text="Delete"
+                android:gravity="center"
+                android:textSize="25sp"
+                android:layout_gravity="center_horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+</LinearLayout>
