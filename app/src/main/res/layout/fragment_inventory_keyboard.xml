@@ -12,10 +12,10 @@
         android:weightSum="5">
         <LinearLayout
             android:layout_weight="2"
-
             android:background="@drawable/border_editable"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
+
             <include layout="@layout/layout_manual_input"/>
 
         </LinearLayout>
@@ -24,10 +24,19 @@
             android:layout_weight="3"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-            <include layout="@layout/layout_numeric_keypad"/>
+            <!--<include layout="@layout/layout_numeric_keypad"/>-->
             <android.inputmethodservice.KeyboardView
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="match_parent"
+                android:id="@+id/keypadView"
+                android:padding="5sp"
+                android:keyTextSize="30sp"
+                android:focusable="true"
+                android:background="@color/white"
+                android:keyBackground="@color/white"
+                android:keyTextColor="@color/colorAccent"
+                android:visibility="visible"
+                android:shadowRadius="0.0"/>
         </LinearLayout>
 
 

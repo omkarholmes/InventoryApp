@@ -4,8 +4,8 @@ public class InventoryItem {
 
     private String upc;
     private String description;
-    private int quantity;
-    private int lastQuantity;
+    private int quantity=0;
+    private int lastQuantity=0;
 
     public InventoryItem(String upc, String description, int quantity) {
         this.upc = upc.equals("") ? "": upc;

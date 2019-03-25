@@ -1,9 +1,11 @@
 package com.omkarmhatre.inventory.application.Utils;
 
+import android.content.Context;
 import android.os.Environment;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.omkarmhatre.inventory.application.Inventory.Inventory;
 import com.omkarmhatre.inventory.application.Inventory.InventoryItem;
 import com.opencsv.CSVWriter;
 
@@ -16,25 +18,25 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.ListIterator;
 
 public class InventoryService {
 
     private File path = new File(Environment.getExternalStorageDirectory() + "/Inventory Files");
-
+    private File inventoryFile =new File(path, "InventoryList.csv");
     private static final String TAG = "F_PATH";
     private static InventoryService instance;
-    //European countries use ";" as
-    //CSV separator because "," is their digit separator
     private static final String CSV_SEPARATOR = ",";
 
 
     String baseDir = android.os.Environment.getExternalStorageDirectory().getAbsolutePath();
     String fileName = "AnalysisData.csv";
-    String filePath = baseDir + File.separator + fileName;
-    File f = new File(filePath);
-    CSVWriter writer;
-    FileWriter mFileWriter;
+
+    private  List<InventoryItem> inventoryList = new ArrayList<>();
+
 
     public static InventoryService getInstance()
     {
@@ -45,7 +47,15 @@ public class InventoryService {
         return instance;
     }
 
-    public void writeIntoFile()
+    public void setInventoryList(List<InventoryItem> inventoryList) {
+        this.inventoryList = inventoryList;
+    }
+
+    public List<InventoryItem> getInventoryList() {
+        return inventoryList;
+    }
+
+    private void writeIntoFile()
     {
         try {
             path.mkdirs();
@@ -58,9 +68,9 @@ public class InventoryService {
 
     public void writeToCSV(List<InventoryItem> productList) {
         try {
-            //path.mkdir();
+            writeIntoFile();
             if (path.exists()) {
-                BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(new File(path, "products.csv"),false), "UTF-8"));
+                BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(inventoryFile,false), "UTF-8"));
                 for (InventoryItem product : productList) {
                     StringBuffer oneLine = new StringBuffer();
                     oneLine.append(product.getUpc());
@@ -82,11 +92,14 @@ public class InventoryService {
         } catch (IOException e) {
         }
 
-        /*// File exist
+        /*
+        // File exist
         try
         {
-
-
+        String filePath = baseDir + File.separator + fileName;
+        File f = new File(filePath);
+        CSVWriter writer;
+        FileWriter mFileWriter;
         if(f.exists()&&!f.isDirectory())
         {
             mFileWriter = new FileWriter(filePath, false);
@@ -109,7 +122,44 @@ public class InventoryService {
     }
 
 
+    public InventoryItem checkInInventoryList(String upc)
+    {
+        ListIterator<InventoryItem> iterator = inventoryList.listIterator();
+        while(iterator.hasNext())
+        {
+            InventoryItem item = iterator.next();
+            if(item.getUpc().equals(upc))
+            {
+                return item;
+            }
+        }
+        return null;
+    }
 
+    public InventoryItem updateInventoryList(InventoryItem newItem, Context context) {
+        ListIterator<InventoryItem> iterator = inventoryList.listIterator();
+        while(iterator.hasNext())
+        {
+            InventoryItem item = iterator.next();
+            if(item.getUpc().equals(newItem.getUpc()))
+            {
+                newItem.setLastQuantity(item.getQuantity());
+                newItem.setQuantity(newItem.getQuantity()+item.getQuantity());
+                //previousQuantity.setText(newItem.getLastQuantity());
+                AppService.notifyUser(context,AppService.ITEM_FOUND);
+                iterator.remove();
+            }
+            else
+            {
+                newItem.setLastQuantity(0);
+            }
+        }
+        Collections.reverse(inventoryList);
+        inventoryList.add(newItem);
+        Collections.reverse(inventoryList);
+        InventoryService.getInstance().writeToCSV(inventoryList);
+        return newItem;
+    }
 
 
 

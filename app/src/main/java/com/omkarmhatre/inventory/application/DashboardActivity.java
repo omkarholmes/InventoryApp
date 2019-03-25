@@ -4,17 +4,13 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.os.Build;
 import android.speech.RecognitionListener;
 import android.speech.RecognizerIntent;
 import android.speech.SpeechRecognizer;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -23,10 +19,12 @@ import android.support.v4.view.ViewPager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.view.WindowManager;
+import android.widget.Switch;
 import android.widget.Toast;
 import com.omkarmhatre.inventory.application.Inventory.InventoryFragment;
+import com.omkarmhatre.inventory.application.Inventory.InventoryManualInputFragment;
 import com.omkarmhatre.inventory.application.PriceBook.PriceBookFragment;
+import com.omkarmhatre.inventory.application.Utils.PriceBookService;
 import com.omkarmhatre.inventory.application.Utils.TextToNumberConverter;
 
 import java.util.ArrayList;
@@ -58,6 +56,64 @@ public class DashboardActivity extends AppCompatActivity implements View.OnClick
         fab.setOnClickListener(this);
         //fab.setVisibility(View.GONE);
 
+        //init Speech Recogniser
+        initialiseSpeechRecognition();
+
+        //Permissions
+        makePermisionRequest();
+
+        // Create the adapter that will return a fragment for each of the
+        // primary sections of the activity.
+        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+
+        // Set up the ViewPager with the sections adapter.
+        setUpViewPager();
+
+    }
+
+    private void setUpViewPager() {
+        mViewPager = (ViewPager) findViewById(R.id.container);
+        mViewPager.setAdapter(mSectionsPagerAdapter);
+        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+
+            @Override
+            public void onPageScrolled(int pageNumber, float v, int i1) {
+
+            }
+
+            @SuppressLint("RestrictedApi")
+            @Override
+            public void onPageSelected(int pageNumber) {
+                fab.setVisibility(View.VISIBLE);
+                switch(pageNumber)
+                {
+                    case 0:{
+                        fab.setImageDrawable(getDrawable(R.drawable.add));
+                        break;
+                    }
+                    case 1 :
+                    {
+                        ((InventoryFragment)mSectionsPagerAdapter.getItem(1)).refreshView();
+                        fab.setImageDrawable(getDrawable(R.drawable.keypad_icon));
+                        break;
+                    }
+                    case 2:
+                    {
+                        fab.setVisibility(View.GONE);
+                        break;
+                    }
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int pageNumber) {
+
+            }
+        });
+    }
+
+    private void initialiseSpeechRecognition() {
+
         speech = SpeechRecognizer.createSpeechRecognizer(this);
         speech.setRecognitionListener(this);
 
@@ -66,45 +122,18 @@ public class DashboardActivity extends AppCompatActivity implements View.OnClick
         recognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault());
         recognizerIntent.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 3);
 
-        //Permissions
+    }
 
+
+    /** To request User Permissions */
+
+    private void makePermisionRequest() {
         askForPermission(Manifest.permission.READ_EXTERNAL_STORAGE,REQUEST_READ_EXTERNAL_STORAGE_PERMISSION);
         askForPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE,REQUEST_WRITE_EXTERNAL_STORAGE_PERMISSION);
         //askForPermission(Manifest.permission.BLUETOOTH,REQUEST_BLUETOOTH_PERMISSION);
         askForPermission(Manifest.permission.RECORD_AUDIO,REQUEST_RECORD_PERMISSION);
 
-        // Create the adapter that will return a fragment for each of the
-        // primary sections of the activity.
-        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
-
-        // Set up the ViewPager with the sections adapter.
-        mViewPager = (ViewPager) findViewById(R.id.container);
-        mViewPager.setAdapter(mSectionsPagerAdapter);
-        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int i, float v, int i1) {
-            }
-
-            @Override
-            public void onPageSelected(int i) {
-                if(i==0)
-                {
-                    fab.setImageDrawable(getDrawable(R.drawable.add));
-                }
-                else
-                {
-                    fab.setImageDrawable(getDrawable(R.drawable.keypad_icon));
-                }
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int i) {
-
-            }
-        });
-
     }
-
     private void askForPermission(String permission, Integer requestCode) {
         if (ContextCompat.checkSelfPermission(DashboardActivity.this, permission) != PackageManager.PERMISSION_GRANTED) {
 
@@ -120,7 +149,6 @@ public class DashboardActivity extends AppCompatActivity implements View.OnClick
             }
         }
     }
-
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -134,6 +162,7 @@ public class DashboardActivity extends AppCompatActivity implements View.OnClick
                     Toast.makeText(this, "Permission Denied!", Toast
                             .LENGTH_SHORT).show();
                 }
+                break;
             }
             case REQUEST_READ_EXTERNAL_STORAGE_PERMISSION:{
                 if (ActivityCompat.checkSelfPermission(this, permissions[0]) == PackageManager.PERMISSION_GRANTED) {
@@ -149,13 +178,36 @@ public class DashboardActivity extends AppCompatActivity implements View.OnClick
                 break;
             }
             case REQUEST_BLUETOOTH_PERMISSION: {
-
+                break;
             }
         }
 
     }
 
+    @SuppressLint("RestrictedApi")
+    @Override
+    protected void onPostResume() {
 
+        switch (mViewPager.getCurrentItem())
+        {
+            case 2:{
+                fab.setVisibility(View.GONE);
+                break;
+            }
+            default:{
+                fab.setVisibility(View.VISIBLE);
+            }
+
+        }
+        super.onPostResume();
+    }
+
+    /**  Speech Recognition Methods  */
+
+   public void startListening()
+   {
+       speech.startListening(recognizerIntent);
+   }
 
     @Override
     public void onBeginningOfSpeech() {
@@ -181,7 +233,6 @@ public class DashboardActivity extends AppCompatActivity implements View.OnClick
             Toast.makeText(this,errorMessage,Toast.LENGTH_LONG).show();
         }
     }
-
 
     @Override
     public void onReadyForSpeech(Bundle arg0) {
@@ -230,8 +281,6 @@ public class DashboardActivity extends AppCompatActivity implements View.OnClick
         return message;
     }
 
-
-
     @Override
     public void onResults(Bundle results) {
         Log.i(LOG_TAG,results.toString());
@@ -254,6 +303,8 @@ public class DashboardActivity extends AppCompatActivity implements View.OnClick
 
     }
 
+    /**     OnClick     */
+
     @SuppressLint("RestrictedApi")
     @Override
     public void onClick(View v) {
@@ -265,13 +316,14 @@ public class DashboardActivity extends AppCompatActivity implements View.OnClick
                 {
                     case 0 :{
                         PriceBookFragment fragment = (PriceBookFragment) mSectionsPagerAdapter.getItem(0);
-                        fragment.showDialog();;
+                        PriceBookService.getInstance().showDialog();;
                         break;
                     }
                     case 1:{
                         fab.setVisibility(View.GONE);
                         InventoryFragment fragment =(InventoryFragment) mSectionsPagerAdapter.getItem(1);
                         fragment.showKeyPad();
+                        break;
                     }
                 }
             }
@@ -302,23 +354,21 @@ public class DashboardActivity extends AppCompatActivity implements View.OnClick
                     fragment= InventoryFragment.newInstance(DashboardActivity.this);
                     break;
                 }
-
+                case 2:
+                {
+                    fragment= InventoryManualInputFragment.getInstance(DashboardActivity.this);
+                    break;
+                }
             }
-
             return fragment;
         }
 
         @Override
         public int getCount() {
             // Show 3 total pages.
-            return 2;
+            return 3;
         }
     }
 
-
-    public void startListening()
-    {
-        speech.startListening(recognizerIntent);
-    }
 
 }

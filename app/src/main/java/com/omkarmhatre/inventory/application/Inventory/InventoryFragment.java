@@ -2,12 +2,9 @@ package com.omkarmhatre.inventory.application.Inventory;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.hardware.input.InputManager;
 import android.inputmethodservice.Keyboard;
 import android.inputmethodservice.KeyboardView;
 import android.os.Bundle;
-import android.speech.tts.TextToSpeech;
-import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
@@ -30,6 +27,7 @@ import com.omkarmhatre.inventory.application.DashboardActivity;
 import com.omkarmhatre.inventory.application.PriceBook.PriceBookEntry;
 import com.omkarmhatre.inventory.application.R;
 import com.omkarmhatre.inventory.application.Utils.AppService;
+import com.omkarmhatre.inventory.application.Utils.CustomUI;
 import com.omkarmhatre.inventory.application.Utils.InventoryService;
 import com.omkarmhatre.inventory.application.Utils.PriceBookService;
 import com.omkarmhatre.inventory.application.VoiceListener.SpeechListenerService;
@@ -43,13 +41,11 @@ import java.util.ListIterator;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-import static com.omkarmhatre.inventory.application.R.color.voiceInputOff;
-
 /**
  * A Inventory fragment containing a simple view.
  */
 @SuppressLint("ValidFragment")
-public class InventoryFragment extends Fragment implements View.OnClickListener,View.OnTouchListener{
+public class InventoryFragment extends Fragment implements View.OnClickListener,View.OnTouchListener,Inventory{
     /**
      * The fragment argument representing the section number for this
      * fragment.
@@ -65,7 +61,7 @@ public class InventoryFragment extends Fragment implements View.OnClickListener,
     @BindView(R.id.closeKeyPad)FloatingActionButton closeKeyPad;
 
     private  static InventoryFragment fragment;
-    List<InventoryItem> inventoryList = new ArrayList<>();
+    List<InventoryItem> inventoryList = InventoryService.getInstance().getInventoryList();
     InventoryItemAdapter adapter;
     DashboardActivity activity;
     Keyboard keypad;
@@ -97,10 +93,15 @@ public class InventoryFragment extends Fragment implements View.OnClickListener,
         setOnClickListeners();
         setOnTouchListeners();
         setupTextWatcher();
-        setupKeypadView();
+        setUpKeyPad();
+
         createTextToSpeechConverter();
-        InventoryService.getInstance().writeIntoFile();
+        //InventoryService.getInstance().writeIntoFile();
         return rootView;
+    }
+
+    private void setUpKeyPad() {
+        keypadView=CustomUI.setupKeypadView(keypadView,getActivity(),this);
     }
 
     private void setOnTouchListeners() {
@@ -117,90 +118,6 @@ public class InventoryFragment extends Fragment implements View.OnClickListener,
     /**
      * Setting Up the Custom Keyboard View
      */
-    private void setupKeypadView() {
-        // Create the Keyboard
-        keypad= new Keyboard(getContext(),R.xml.numeric_keypad);
-
-        // Attach the keyboard to the view
-        keypadView.setKeyboard( keypad );
-
-        // Do not show the preview balloons
-        keypadView.setPreviewEnabled(false);
-
-        // Install the key handler
-        keypadView.setOnKeyboardActionListener(new KeyboardView.OnKeyboardActionListener() {
-            //Initialising the keyboard Listener
-            @Override public void onKey(int primaryCode, int[] keyCodes)
-            {
-                //Here check the primaryCode to see which key is pressed
-                //based on the android:codes property
-                View v = getActivity().getCurrentFocus();
-                String result;
-                result=((EditText)v).getText().toString();
-                switch (primaryCode)
-                {
-                    case -1:{
-                        if(result.length() <=1)
-                        {
-                            result="";
-                        }
-                        else
-                        {
-                          result=result.substring(0,result.length()-1);
-                        }
-                        ((EditText)v).setText(result);
-                        break;
-                    }
-                    case 100: {
-
-                        if(v.getId() == R.id.quantity)
-                        {
-                            addItemInInventoryList(keypadView);
-                            result="";
-                        }
-                        else
-                        {
-                            checkUpcInPriceBook(result);
-                        }
-
-                        break;
-                    }
-                    default:{
-                        result+=primaryCode;
-                        ((EditText)v).setText(result);
-                    }
-                }
-                if(result.length()>13)
-                {
-                    return;
-                }
-                ((EditText)v).setSelection(result.length());
-
-
-            }
-
-            @Override public void onPress(int arg0) {
-            }
-
-            @Override public void onRelease(int primaryCode) {
-            }
-
-            @Override public void onText(CharSequence text) {
-            }
-
-            @Override public void swipeDown() {
-            }
-
-            @Override public void swipeLeft() {
-            }
-
-            @Override public void swipeRight() {
-            }
-
-            @Override public void swipeUp() {
-            }
-        });
-    }
 
     @Override
     public void onPause() {
@@ -215,8 +132,7 @@ public class InventoryFragment extends Fragment implements View.OnClickListener,
     @Override
     public void onResume() {
         super.onResume();
-        closeKeyPad();
-        activity.fab.setVisibility(View.VISIBLE);
+        //closeKeyPad();
         //SpeechListenerService.start(this,getContext());
         adapter.notifyDataSetChanged();
     }
@@ -310,9 +226,6 @@ public class InventoryFragment extends Fragment implements View.OnClickListener,
         switch(v.getId())
         {
             case R.id.fab :{
-                //Todo : remove below code and change to add into price book
-                //SpeechListenerService.start(this,getContext());
-                //startActivity(new Intent(getContext(),VoiceListener.class));
                 activity.startListening();
                 break;
             }
@@ -334,11 +247,11 @@ public class InventoryFragment extends Fragment implements View.OnClickListener,
 
     @SuppressLint("RestrictedApi")
     private void closeKeyPad() {
-        if (this.isResumed() && getActivity().getCurrentFocus().getId() == quantity.getId() )
+        /*if (this.isResumed() && getActivity().getCurrentFocus().getId() == quantity.getId() )
         {
             quantity.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.voiceInputOn));
             SpeechListenerService.start(this,getContext());
-        }
+        }*/
         inputViaVoice=true;
         keypadLayout.setVisibility(View.GONE);
         activity.fab.setVisibility(View.VISIBLE);
@@ -346,8 +259,73 @@ public class InventoryFragment extends Fragment implements View.OnClickListener,
         closeKeyPad.setVisibility(View.GONE);
     }
 
-    private void addItemInInventoryList(View view)
+//    public void addItemInInventoryList(View view)
+//    {
+//
+//    }
+
+    public void refreshView()
     {
+        adapter.notifyDataSetChanged();
+    }
+
+    public void clearData() {
+        upcCode.setText("");
+        description.setText("");
+        quantity.setText("");
+        upcCode.requestFocus();
+    }
+
+//    public void updateInventoryList(InventoryItem newItem) {
+//
+//    }
+
+    @Override
+    public void updateInventoryList(InventoryItem newItem) {
+        ListIterator<InventoryItem> iterator = inventoryList.listIterator();
+        while(iterator.hasNext())
+        {
+            InventoryItem item = iterator.next();
+            if(item.getUpc().equals(newItem.getUpc()))
+            {
+                newItem.setLastQuantity(item.getQuantity());
+                newItem.setQuantity(newItem.getQuantity()+item.getQuantity());
+                AppService.notifyUser(getContext(),AppService.ITEM_FOUND);
+                iterator.remove();
+            }
+            else
+            {
+                newItem.setLastQuantity(0);
+            }
+        }
+        Collections.reverse(inventoryList);
+        inventoryList.add(newItem);
+        Collections.reverse(inventoryList);
+        InventoryService.getInstance().writeToCSV(inventoryList);
+    }
+
+    @Override
+    public void checkUpcInPriceBook(String upc) {
+        InventoryItem item = PriceBookService.getInstance().checkInPriceBook(upc);
+        description.setText("N/A");
+        if(item != null)
+        {
+            description.setText(item.getDescription());
+            if(inputViaVoice)
+            {
+                SpeechListenerService.start(this,getContext());
+            }
+        }
+        else
+        {
+            AppService.notifyUser(getContext(),AppService.ITEM_NOT_FOUND);
+        }
+        quantity.requestFocus();
+        createTextToSpeechConverter();
+    }
+
+    @Override
+    public void addItemInInventoryList(View view) {
         if(upcCode.getText().toString().equals("") || quantity.getText().toString().equals(""))
         {
             if(upcCode.getText().toString().equals(""))
@@ -371,64 +349,10 @@ public class InventoryFragment extends Fragment implements View.OnClickListener,
         clearData();
     }
 
-    private void clearData() {
-        upcCode.setText("");
-        description.setText("");
-        quantity.setText("");
-        upcCode.requestFocus();
-    }
 
-    private void updateInventoryList(InventoryItem newItem) {
-
-        ListIterator<InventoryItem> iterator = inventoryList.listIterator();
-        while(iterator.hasNext())
-        {
-            InventoryItem item = iterator.next();
-            if(item.getUpc().equals(newItem.getUpc()))
-            {
-                newItem.setLastQuantity(item.getQuantity());
-                newItem.setQuantity(newItem.getQuantity()+item.getQuantity());
-                AppService.notifyUser(getContext(),AppService.ITEM_FOUND);
-                iterator.remove();
-            }
-            else
-            {
-                newItem.setLastQuantity(0);
-            }
-        }
-        Collections.reverse(inventoryList);
-        inventoryList.add(newItem);
-        Collections.reverse(inventoryList);
-        InventoryService.getInstance().writeToCSV(inventoryList);
-
-    }
-
-
-    private void checkUpcInPriceBook(String s) {
-        boolean found=false;
-        for (PriceBookEntry pb : PriceBookService.getInstance().getPriceBook()) {
-            if (pb.getUpc().equals(s)) {
-                description.setText(pb.getDescription());
-                quantity.requestFocus();
-                //activity.startListening();
-                if(inputViaVoice)
-                {
-                    SpeechListenerService.start(this,getContext());
-                }
-                found = true;
-                break;
-            }
-            description.setText("N/A");
-        }
-        if(!found)
-        {
-            //AppService.notifyUser(this.getView(),"New Item Found !");
-            AppService.notifyUser(getContext(),AppService.ITEM_NOT_FOUND);
-            quantity.requestFocus();
-        }
-        createTextToSpeechConverter();
-        //SpeechListenerService.start(this,getContext());
-    }
+//    public void checkUpcInPriceBook(String s) {
+//
+//    }
 
     public void setQuantity(String quantityValue)
     {

@@ -4,112 +4,181 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/colorAccent"
+    android:background="@color/white"
     android:weightSum="4">
 
-    <LinearLayout
-        android:padding="10sp"
-        android:layout_weight="1"
-        android:id="@+id/upcEntry"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <EditText
-            android:background="@drawable/border_editable"
-            android:text="UPC"
-            android:textColor="@color/colorAccent"
-            android:textStyle="bold"
-            android:gravity="center"
-            android:textSize="20sp"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
-    </LinearLayout>
 
     <LinearLayout
-        android:padding="10sp"
-        android:layout_weight="1"
-        android:id="@+id/descriptionEntry"
+        android:background="@drawable/border"
+        android:layout_weight="3"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
-        <EditText
-            android:background="@drawable/border_editable"
-            android:textColor="@color/colorAccent"
-            android:textStyle="bold"
-            android:text="Description"
-            android:gravity="center"
-            android:textSize="20sp"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_weight="1"
-        android:orientation="horizontal"
-        android:id="@+id/quantityEntry"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
         <LinearLayout
-            android:padding="10sp"
-            android:orientation="vertical"
+            android:padding="7.5sp"
             android:layout_weight="1"
-            android:id="@+id/prevQuantityEntry"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
             <TextView
-                android:background="@drawable/border_editable"
+                android:paddingLeft="20sp"
+                android:text="UPC :"
                 android:textStyle="bold"
-                android:textColor="@color/colorAccent"
-                android:text="Previous"
-                android:gravity="center"
+                android:textColor="@color/white"
                 android:textSize="20sp"
+                android:padding="5sp"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="wrap_content" />
 
-        </LinearLayout>
-        <LinearLayout
-            android:padding="10sp"
-            android:orientation="vertical"
-            android:layout_weight="1"
-            android:id="@+id/currentQuantityEntry"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
             <EditText
                 android:background="@drawable/border_editable"
-                android:textStyle="bold"
+                android:hint="UPC"
+                android:id="@+id/upcEntry"
                 android:textColor="@color/colorAccent"
-                android:text="Current"
+                android:textStyle="bold"
                 android:gravity="center"
-                android:textSize="21sp"
+                android:textSize="20sp"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
 
         </LinearLayout>
+
         <LinearLayout
-            android:padding="10sp"
-            android:orientation="vertical"
+            android:padding="7.5sp"
             android:layout_weight="1"
-            android:id="@+id/totalQuantityEntry"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
             <TextView
-                android:background="@drawable/border_editable"
+                android:paddingLeft="20sp"
+                android:text="Description :"
                 android:textStyle="bold"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                android:padding="5sp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <EditText
+                android:background="@drawable/border_editable"
                 android:textColor="@color/colorAccent"
-                android:text="Total"
+                android:textStyle="bold"
+                android:hint="Description"
+                android:lines="1"
+                android:id="@+id/descriptionEntry"
                 android:gravity="center"
                 android:textSize="20sp"
-                android:layout_gravity="center_horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:padding="7.5sp"
+            android:layout_weight="1"
+            android:id="@+id/quantityEntry"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:text="Quantity :"
+                android:gravity="center"
+                android:textAlignment="center"
+                android:textStyle="bold"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <LinearLayout
+                android:padding="5sp"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:gravity="center"
+                android:layout_gravity="center"
+                android:layout_height="match_parent">
+
+                <LinearLayout
+                    android:paddingRight="10sp"
+                    android:orientation="vertical"
+                    android:layout_weight="1"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+                    <TextView
+                        android:background="@drawable/border_editable"
+                        android:textStyle="bold"
+                        android:textColor="@color/colorAccent"
+                        android:hint="Previous"
+                        android:id="@+id/prevQuantityEntry"
+                        android:gravity="center"
+                        android:textSize="20sp"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
+
+                </LinearLayout>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="+"
+                    android:textColor="@color/white"
+                    android:textSize="20sp"/>
+                <LinearLayout
+                    android:paddingLeft="10sp"
+                    android:paddingRight="10sp"
+                    android:orientation="vertical"
+                    android:layout_weight="1"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+                    <EditText
+                        android:background="@drawable/border_editable"
+                        android:textStyle="bold"
+                        android:textColor="@color/colorAccent"
+                        android:hint="Current"
+                        android:id="@+id/currentQuantityEntry"
+                        android:gravity="center"
+                        android:textSize="21sp"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
+
+                </LinearLayout>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="="
+                    android:textColor="@color/white"
+                    android:textSize="20sp"/>
+                <LinearLayout
+                    android:paddingLeft="10sp"
+                    android:orientation="vertical"
+                    android:layout_weight="1"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+                    <TextView
+                        android:background="@drawable/border_editable"
+                        android:textStyle="bold"
+                        android:textColor="@color/colorAccent"
+                        android:hint="Total"
+                        android:id="@+id/totalQuantityEntry"
+                        android:gravity="center"
+                        android:textSize="20sp"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
+
+                </LinearLayout>
+
+            </LinearLayout>
 
         </LinearLayout>
 
     </LinearLayout>
 
     <LinearLayout
+        android:padding="10sp"
         android:background="@color/white"
         android:layout_weight="1"
         android:orientation="horizontal"
@@ -118,9 +187,9 @@
         android:layout_height="wrap_content">
 
         <LinearLayout
-            android:padding="10sp"
             android:orientation="vertical"
             android:layout_weight="1"
+            android:layout_marginRight="10sp"
             android:id="@+id/clearFunction"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
@@ -137,7 +206,6 @@
 
         </LinearLayout>
         <LinearLayout
-            android:padding="10sp"
             android:orientation="vertical"
             android:layout_weight="1"
             android:id="@+id/deleteFunction"
