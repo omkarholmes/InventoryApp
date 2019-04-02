@@ -134,7 +134,7 @@ public class InventoryFragment extends Fragment implements View.OnClickListener,
         super.onResume();
         //closeKeyPad();
         //SpeechListenerService.start(this,getContext());
-        adapter.notifyDataSetChanged();
+        refreshView();
     }
 
     @SuppressLint("RestrictedApi")
@@ -172,7 +172,7 @@ public class InventoryFragment extends Fragment implements View.OnClickListener,
                 {
                     return;
                 }
-                if(s.toString().equals("") && s.toString().length()<=12)
+                if(s.toString().equals("") || s.toString().length()<=12)
                 {
                     return;
                 }
@@ -235,7 +235,7 @@ public class InventoryFragment extends Fragment implements View.OnClickListener,
             }
             case R.id.closeKeyPad: {
                 closeKeyPad();
-                adapter.notifyDataSetChanged();
+                refreshView();
                 break;
             }
             default:{
@@ -266,6 +266,7 @@ public class InventoryFragment extends Fragment implements View.OnClickListener,
 
     public void refreshView()
     {
+        recyclerView.setVisibility(View.VISIBLE);
         adapter.notifyDataSetChanged();
     }
 
@@ -342,10 +343,9 @@ public class InventoryFragment extends Fragment implements View.OnClickListener,
             return;
         }
         introText.setVisibility(View.GONE);
-        recyclerView.setVisibility(View.VISIBLE);
         InventoryItem item = new InventoryItem(upcCode.getText().toString(),description.getText().toString(),Integer.parseInt(quantity.getText().toString()));
         updateInventoryList(item);
-        adapter.notifyDataSetChanged();
+        refreshView();
         clearData();
     }
 
@@ -372,7 +372,15 @@ public class InventoryFragment extends Fragment implements View.OnClickListener,
         ((EditText)v).requestFocus();
         InputMethodManager imm =(InputMethodManager)getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(v.getWindowToken(),0);
-        showKeyPad();
+
+        if(!upcCode.getText().equals(""))
+        {
+            InventoryManualInputFragment fragment = (InventoryManualInputFragment) activity.getInputFragment();
+            fragment.upc.setText(upcCode.getText());
+        }
+
+        activity.launchManualInputScreen();
+        //showKeyPad();
         return true;
     }
 }

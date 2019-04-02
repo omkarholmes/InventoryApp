@@ -315,12 +315,13 @@ public class DashboardActivity extends AppCompatActivity implements View.OnClick
                 switch (mViewPager.getCurrentItem())
                 {
                     case 0 :{
-                        PriceBookFragment fragment = (PriceBookFragment) mSectionsPagerAdapter.getItem(0);
-                        PriceBookService.getInstance().showDialog();;
+                        //PriceBookFragment fragment = (PriceBookFragment) mSectionsPagerAdapter.getItem(0);
+                        PriceBookService.getInstance().showDialog();
                         break;
                     }
                     case 1:{
                         fab.setVisibility(View.GONE);
+                        //mViewPager.setCurrentItem(2);
                         InventoryFragment fragment =(InventoryFragment) mSectionsPagerAdapter.getItem(1);
                         fragment.showKeyPad();
                         break;
@@ -368,6 +369,21 @@ public class DashboardActivity extends AppCompatActivity implements View.OnClick
             // Show 3 total pages.
             return 3;
         }
+    }
+
+    public void launchManualInputScreen()
+    {
+        mViewPager.setCurrentItem(2);
+    }
+
+    public Fragment getInputFragment()
+    {
+        return mSectionsPagerAdapter.getItem(2);
+    }
+
+    public void  launchInventoryList()
+    {
+        mViewPager.setCurrentItem(1);
     }
 
 

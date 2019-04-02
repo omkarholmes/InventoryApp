@@ -37,7 +37,7 @@ import butterknife.ButterKnife;
 public class InventoryManualInputFragment extends Fragment implements View.OnClickListener,View.OnTouchListener,Inventory {
 
     @BindView(R.id.keypadView) KeyboardView keypadView;
-    @BindView(R.id.upcEntry) EditText upc;
+    @BindView(R.id.upcEntry) public EditText upc;
     @BindView(R.id.descriptionEntry) EditText description;
     @BindView(R.id.clearFunction) LinearLayout clearBtn;
     @BindView(R.id.deleteFunction) LinearLayout deleteBtn;
@@ -47,7 +47,7 @@ public class InventoryManualInputFragment extends Fragment implements View.OnCli
 
     private static InventoryManualInputFragment instance;
     DashboardActivity activity;
-    List<InventoryItem> inventoryList =InventoryService.getInstance().getInventoryList();
+    List<InventoryItem> inventoryList = InventoryService.getInstance().getInventoryList();
 
     @SuppressLint("ValidFragment")
     private InventoryManualInputFragment(DashboardActivity activity)
@@ -83,6 +83,32 @@ public class InventoryManualInputFragment extends Fragment implements View.OnCli
     }
 
     private void setTextWatcher() {
+        upc.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if(s.toString().equals("") || s.toString().length()<=12)
+                {
+                    return;
+                }
+                checkUpcInPriceBook(s.toString());
+                /*if(!PriceBookService.getInstance().getPriceBook().isEmpty())
+                {
+                    checkUpcInPriceBook(s.toString());
+                }*/
+
+            }
+        });
+
         currentQuantity.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -161,7 +187,8 @@ public class InventoryManualInputFragment extends Fragment implements View.OnCli
         Collections.reverse(inventoryList);
         inventoryList.add(newItem);
         Collections.reverse(inventoryList);
-        InventoryService.getInstance().writeToCSV(inventoryList);
+        //InventoryService.getInstance().writeToCSV(inventoryList);
+        activity.launchInventoryList();
         clearData();
     }
 
