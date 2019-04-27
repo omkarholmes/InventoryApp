@@ -1,5 +1,7 @@
 package com.omkarmhatre.inventory.application.Inventory;
 
+import android.app.Activity;
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -14,8 +16,10 @@ import java.util.List;
 public class InventoryItemAdapter extends RecyclerView.Adapter {
 
     List<InventoryItem> inventoryItemList;
+    Activity activity;
 
-    public InventoryItemAdapter(List<InventoryItem> inventoryItemList) {
+    public InventoryItemAdapter(Activity activity, List<InventoryItem> inventoryItemList) {
+        this.activity=activity;
         this.inventoryItemList=inventoryItemList;
     }
 
@@ -24,7 +28,7 @@ public class InventoryItemAdapter extends RecyclerView.Adapter {
     public InventoryItemViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         LayoutInflater inflater =  LayoutInflater.from(viewGroup.getContext());
         View view =inflater.inflate(R.layout.layout_item_entry,null);
-        InventoryItemViewHolder viewHolder = new InventoryItemViewHolder(view);
+        InventoryItemViewHolder viewHolder = new InventoryItemViewHolder(activity,view);
         return viewHolder;
     }
 

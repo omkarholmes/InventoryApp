@@ -72,6 +72,16 @@ public class PriceBookService {
         this.priceBook = priceBook;
     }
 
+    public void addPriceBook(List<PriceBookEntry> priceBook)
+    {
+        if(this.priceBook.isEmpty()) {
+            setPriceBook(priceBook);
+        }
+        else {
+            this.priceBook.addAll(priceBook);
+        }
+    }
+
     public List<PriceBookEntry> getPriceBook() {
         return priceBook;
     }
@@ -83,7 +93,7 @@ public class PriceBookService {
         {
             if(item.getUpc().equals(upcCode))
             {
-                return inventoryItem = new InventoryItem(item.getUpc(),item.getDescription());
+                return new InventoryItem(item.getUpc(),item.getDescription());
             }
         }
 
@@ -265,7 +275,7 @@ public class PriceBookService {
     }
 
     private void openSelectedFile(FileExplorer fileExplorer, File file) throws IOException {
-        PriceBookService.getInstance().setPriceBook(fileExplorer.readCSVFile(file));
+        PriceBookService.getInstance().addPriceBook(fileExplorer.readCSVFile(file));
         priceBookPath=file;
         if(priceBook.isEmpty())
         {

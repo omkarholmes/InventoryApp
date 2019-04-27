@@ -123,7 +123,7 @@ public class InventoryFragment extends Fragment implements View.OnClickListener,
     public void onPause() {
         super.onPause();
         closeKeyPad();
-        InventoryService.getInstance().writeToCSV(inventoryList);
+        InventoryService.getInstance().writeToFile(inventoryList);
         //keypadLayout.setVisibility(View.GONE);
 
     }
@@ -216,7 +216,7 @@ public class InventoryFragment extends Fragment implements View.OnClickListener,
     private void setupRecyclerView(LinearLayoutManager linearLayoutManager) {
 
         recyclerView.setLayoutManager(linearLayoutManager);
-        adapter = new InventoryItemAdapter(inventoryList);
+        adapter = new InventoryItemAdapter(getActivity(),inventoryList);
         recyclerView.setAdapter(adapter);
     }
 
@@ -259,10 +259,6 @@ public class InventoryFragment extends Fragment implements View.OnClickListener,
         closeKeyPad.setVisibility(View.GONE);
     }
 
-//    public void addItemInInventoryList(View view)
-//    {
-//
-//    }
 
     public void refreshView()
     {
@@ -276,10 +272,6 @@ public class InventoryFragment extends Fragment implements View.OnClickListener,
         quantity.setText("");
         upcCode.requestFocus();
     }
-
-//    public void updateInventoryList(InventoryItem newItem) {
-//
-//    }
 
     @Override
     public void updateInventoryList(InventoryItem newItem) {
@@ -302,7 +294,7 @@ public class InventoryFragment extends Fragment implements View.OnClickListener,
         Collections.reverse(inventoryList);
         inventoryList.add(newItem);
         Collections.reverse(inventoryList);
-        InventoryService.getInstance().writeToCSV(inventoryList);
+        InventoryService.getInstance().writeToFile(inventoryList);
     }
 
     @Override
@@ -350,9 +342,6 @@ public class InventoryFragment extends Fragment implements View.OnClickListener,
     }
 
 
-//    public void checkUpcInPriceBook(String s) {
-//
-//    }
 
     public void setQuantity(String quantityValue)
     {

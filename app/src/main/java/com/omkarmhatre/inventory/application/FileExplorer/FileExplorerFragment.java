@@ -215,7 +215,7 @@ public class FileExplorerFragment extends Fragment implements View.OnClickListen
                             //File priceBookFile=fileExplorer.explore();
                             try {
                                 //Read File
-                                PriceBookService.getInstance().setPriceBook(fileExplorer.readCSVFile(sel));
+                                PriceBookService.getInstance().addPriceBook(fileExplorer.readCSVFile(sel));
                                 //AppService.notifyUser(v,"You can load the price book");
                             } catch (IOException e) {
                                 Log.wtf("omk",e.getMessage());

@@ -5,6 +5,7 @@ import android.os.Environment;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.omkarmhatre.inventory.application.FileExplorer.FileExplorer;
 import com.omkarmhatre.inventory.application.Inventory.Inventory;
 import com.omkarmhatre.inventory.application.Inventory.InventoryItem;
 import com.opencsv.CSVWriter;
@@ -26,7 +27,10 @@ import java.util.ListIterator;
 public class InventoryService {
 
     private File path = new File(Environment.getExternalStorageDirectory() + "/Inventory Files");
-    private File inventoryFile =new File(path, "InventoryList.csv");
+    private File priceBookFolder = new File(path,"/Price Books");
+    private File inventoryListsFolder = new File(path,"/Inventory Lists");
+    private File imports = new File(path,"ImportedPriceBook.txt");
+    private File inventoryFile =new File(inventoryListsFolder, "InventoryList.csv");
     private static final String TAG = "F_PATH";
     private static InventoryService instance;
     private static final String CSV_SEPARATOR = ",";
@@ -59,39 +63,19 @@ public class InventoryService {
     {
         try {
             path.mkdirs();
-
+            priceBookFolder.mkdir();
+            inventoryListsFolder.mkdir();
         } catch (SecurityException e) {
             Log.e(TAG, "unable to write on the sd card ");
         }
 
     }
 
-    public void writeToCSV(List<InventoryItem> productList) {
-        try {
-            writeIntoFile();
-            if (path.exists()) {
-                BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(inventoryFile,false), "UTF-8"));
-                for (InventoryItem product : productList) {
-                    StringBuffer oneLine = new StringBuffer();
-                    oneLine.append(product.getUpc());
-                    oneLine.append(CSV_SEPARATOR);
-                    oneLine.append(product.getDescription().trim());
-                    oneLine.append(CSV_SEPARATOR);
-                    oneLine.append(product.getQuantity());
-                    oneLine.append(CSV_SEPARATOR);
-                    oneLine.append(product.getLastQuantity());
-                    bw.write(oneLine.toString());
-                    bw.newLine();
+    public void writeToFile(List<InventoryItem> productList) {
 
-                }
-                bw.flush();
-                bw.close();
-            }
-        } catch (UnsupportedEncodingException e) {
-        } catch (FileNotFoundException e) {
-        } catch (IOException e) {
-        }
-
+        writeIntoFile();
+        FileExplorer fileExplorer = new FileExplorer();
+        fileExplorer.writeToCSV(productList);
         /*
         // File exist
         try
@@ -157,7 +141,7 @@ public class InventoryService {
         Collections.reverse(inventoryList);
         inventoryList.add(newItem);
         Collections.reverse(inventoryList);
-        InventoryService.getInstance().writeToCSV(inventoryList);
+        writeToFile(inventoryList);
         return newItem;
     }
 
